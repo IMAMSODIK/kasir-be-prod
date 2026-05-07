@@ -69,15 +69,17 @@ class ApiMenuController extends Controller
     }
 
     public function searchMenus(Request $request)
-    {
+{
+    try {
+
         $request->validate([
             'query' => 'required|string|min:1'
         ]);
 
         $menus = Menu::with([
-            'kategoriMenu',
-            'fotoMenus'
-        ])
+                'kategoriMenu',
+                'fotoMenus'
+            ])
             ->where('status', true)
             ->where('is_ready', true)
             ->where('nama_menu', 'like', '%' . $request->query . '%')
@@ -102,7 +104,26 @@ class ApiMenuController extends Controller
 
         return response()->json([
             'success' => true,
+            'message' => 'Data menu berhasil ditemukan',
             'data' => $products
         ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Validasi gagal',
+            'errors' => $e->errors()
+        ], 422);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan pada server',
+            'error' => $e->getMessage()
+        ], 500);
+
     }
+}
 }
