@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiAuthController;
+use App\Http\Controllers\ApiMenuController;
 use App\Http\Controllers\MidtransController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,4 +14,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/update-profile', [ApiAuthController::class, 'updateProfile']);
     Route::post('/change-password-api', [ApiAuthController::class, 'changePassword']);
     Route::post('/logout', [ApiAuthController::class, 'logout']);
+
+    Route::get('/menus', [ApiMenuController::class, 'index']);
 });
