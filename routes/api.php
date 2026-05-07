@@ -16,6 +16,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
 
     Route::get('/menus', [ApiMenuController::class, 'index']);
-    Route::get('/menus/search', [ApiMenuController::class, 'search']);
     Route::get('/menus/{id}', [ApiMenuController::class, 'show']);
 });

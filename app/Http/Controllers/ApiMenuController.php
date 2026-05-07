@@ -67,4 +67,42 @@ class ApiMenuController extends Controller
             'products' => $products,
         ]);
     }
+
+    public function searchMenus(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|min:1'
+        ]);
+
+        $menus = Menu::with([
+            'kategoriMenu',
+            'fotoMenus'
+        ])
+            ->where('status', true)
+            ->where('is_ready', true)
+            ->where('nama_menu', 'like', '%' . $request->query . '%')
+            ->orderBy('nama_menu', 'asc')
+            ->get();
+
+        $products = $menus->map(function ($menu) {
+
+            $firstPhoto = $menu->fotoMenus->first();
+
+            return [
+                'id' => $menu->id,
+                'name' => $menu->nama_menu,
+                'price' => (int) $menu->harga,
+                'category' => $menu->kategoriMenu?->nama_kategori,
+                'image' => $firstPhoto
+                    ? asset('storage/' . $firstPhoto->foto_path)
+                    : null,
+                'description' => $menu->deskripsi,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $products
+        ]);
+    }
 }
