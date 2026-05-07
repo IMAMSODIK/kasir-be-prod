@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ApiMenuController;
+use App\Http\Controllers\ApiOrderController;
 use App\Http\Controllers\MidtransController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,4 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/menus', [ApiMenuController::class, 'index']);
     Route::get('/menus/search', [ApiMenuController::class, 'searchMenus']);
+
+    Route::post('/checkout', [ApiOrderController::class, 'checkout']);
+    Route::get('/order/status/{orderId}', [ApiOrderController::class, 'checkStatus']);
 });
