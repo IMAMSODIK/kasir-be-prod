@@ -16,7 +16,7 @@ class ApiMenuController extends Controller
 
         array_unshift($categories, 'Semua');
 
-        $menus = Menu::with('kategoriMenu')
+        $menus = Menu::with(['kategoriMenu', 'fotoMenus'])
             ->where('status', true)
             ->where('is_ready', true)
             ->orderBy('created_at', 'desc')
@@ -28,8 +28,8 @@ class ApiMenuController extends Controller
                 'name' => $menu->nama_menu,
                 'price' => (int) $menu->harga,
                 'category' => $menu->kategoriMenu?->nama_kategori,
-                'image' => $menu->image
-                    ? asset('storage/' . $menu->image)
+                'image' => $menu->fotoMenus->first()
+                    ? asset('storage/' . $menu->fotoMenus->first()->foto_path)
                     : null,
                 'description' => $menu->deskripsi,
             ];
