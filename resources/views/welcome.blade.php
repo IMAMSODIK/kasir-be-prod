@@ -13,6 +13,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        /* CSS Classes untuk tema */
+        .bg-theme-primary {
+            background-color: #074b88;
+        }
+
+        .bg-theme-dark {
+            background-color: #063d6e;
+        }
+
+        .text-theme-primary {
+            color: #074b88;
+        }
+
+        .border-theme-primary {
+            border-color: #074b88;
+        }
+
+        .hover\:bg-theme-dark:hover {
+            background-color: #063d6e;
+        }
+
+        .float-cart:hover {
+            transform: scale(1.05);
+            background-color: #063d6e;
+        }
+
+        /* Hover effect untuk tombol kategori */
+        .tab-category:hover {
+            background-color: #074b88;
+            color: white !important;
+            border-color: #074b88 !important;
+        }
+
+        /* Style untuk link di sidebar */
+        .sidebar nav a:hover {
+            background-color: #f0f7ff;
+        }
+
+        /* Animasi scale untuk modal */
+        @keyframes scale {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .animate-scale {
+            animation: scale 0.2s ease-out;
+        }
+
+        /* Scrollbar styling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50">
@@ -20,43 +86,54 @@
     <div id="overlay" class="overlay fixed inset-0 bg-black/50"></div>
 
     <aside id="sidebar" class="sidebar fixed top-0 left-0 w-72 h-full bg-white shadow-2xl z-50 flex flex-col">
-        <div class="p-5 border-b flex justify-between items-center">
-            <h2 class="text-xl font-bold text-orange-600">
-                <img src="{{ asset('own_assets/logo/logo.png') }}" width="50%">
-            </h2>
-            <button id="closeSidebarBtn" class="text-gray-500 text-2xl"><i class="fas fa-times"></i></button>
+        <div class="p-4 md:p-5 border-b flex justify-between items-center">
+            <div class="flex items-center gap-2 md:gap-3">
+                <img src="{{ asset('own_assets/logo/logo.png') }}" class="h-8 md:h-10 w-auto">
+                <div>
+                    <span class="text-base md:text-lg font-bold" style="color: #074b88;">Universitas Kopi</span>
+                    <i><p class="text-xs text-gray-500 hidden md:block">#MAKEEVERYONEHAPPY</p></i>
+                </div>
+            </div>
+            <button id="closeSidebarBtn"
+                class="text-gray-500 text-xl md:text-2xl hover:text-[#074b88] transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         <nav class="flex-1 p-4 space-y-3">
-            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-orange-50 transition"><i
-                    class="fas fa-home w-6 text-orange-500"></i><span>Beranda</span></a>
-            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-orange-50 transition"><i
-                    class="fas fa-history w-6 text-orange-500"></i><span>Pesanan</span></a>
+            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition"
+                style="color: #074b88;"><i class="fas fa-home w-6" style="color: #074b88;"></i><span>Beranda</span></a>
+            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50 transition"
+                style="color: #074b88;"><i class="fas fa-history w-6"
+                    style="color: #074b88;"></i><span>Pesanan</span></a>
         </nav>
         <div class="p-5 border-t bg-gray-50">
-            <h3 class="font-semibold text-gray-700 mb-3"><i class="fas fa-address-card mr-2"></i>Kontak Kami</h3>
+            <h3 class="font-semibold mb-3" style="color: #074b88;"><i class="fas fa-address-card mr-2"></i>Kontak Kami
+            </h3>
             <div class="space-y-2 text-sm text-gray-600">
-                <p><i class="fab fa-whatsapp w-5 text-green-600"></i> +62 812-3456-7890</p>
-                <p><i class="fas fa-phone-alt w-5 text-blue-500"></i> (021) 1234 5678</p>
-                <p><i class="fas fa-envelope w-5 text-red-400"></i> halo@restoran.id</p>
-                <p><i class="fas fa-map-marker-alt w-5 text-gray-600"></i> Jl. Kuliner No. 88, Jakarta</p>
+                <p><i class="fab fa-whatsapp w-5 text-green-600"></i> +62 822-7344-8313</p>
+                <p><i class="fas fa-map-marker-alt w-5 text-gray-600"></i> Jl. Prada, Peurada, Kec. Syiah Kuala, Kota Banda Aceh</p>
             </div>
             <div class="flex mt-4 space-x-3">
-                <i class="fab fa-instagram text-2xl text-pink-500"></i>
-                <i class="fab fa-facebook text-2xl text-blue-700"></i>
-                <i class="fab fa-tiktok text-2xl text-black"></i>
+                <a href="https://www.instagram.com/universitaskopi.id" target="_blank"><i class="fab fa-instagram text-2xl text-pink-500"></i></a>
+                <a href="" target="_blank"><i class="fab fa-facebook text-2xl text-blue-700"></i></a>
+                <a href="https://www.tiktok.com/@universitaskopi.id?_r=1&_t=ZS-96CttSm8ef4" target="_blank"><i class="fab fa-tiktok text-2xl text-black"></i></a>
             </div>
         </div>
     </aside>
 
     <main class="pb-28">
         <header class="bg-white shadow-sm sticky top-0 z-20">
-            <div class="container mx-auto px-4 py-4 flex items-center gap-4">
-                <button id="menuToggleBtn" class="text-2xl text-orange-600 focus:outline-none">
+            <div class="container mx-auto px-4 py-3 flex items-center gap-3">
+                <button id="menuToggleBtn" class="text-2xl focus:outline-none" style="color: #074b88;">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 class="text-xl font-bold text-gray-800">
-                    <img src="{{ asset('own_assets/logo/logo.png') }}" width="50%">
-                </h1>
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('own_assets/logo/logo.png') }}" class="h-8 md:h-9 w-auto">
+                    <div>
+                        <span class="font-bold text-base md:text-lg" style="color: #074b88;">Universitas Kopi</span>
+                        <i><p class="text-xs text-gray-500 hidden md:block">#MAKEEVERYONEHAPPY</p></i>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -71,14 +148,14 @@
             <div class="flex overflow-x-auto space-x-3 pb-2 no-scrollbar scroll-smooth" id="categoryTabs">
                 <button
                     class="tab-category flex items-center gap-2 px-4 md:px-5 py-2 rounded-full border border-gray-300 bg-white text-gray-700 font-medium whitespace-nowrap transition hover:shadow flex-shrink-0"
-                    data-cat="0">
+                    data-cat="0" style="border-color: #074b88;">
                     <img src="{{ asset('own_assets/icon/all_kategori.png') }}" class="w-5 h-5">
                     <span>Semua</span>
                 </button>
                 @foreach ($kategori as $kat)
                     <button
                         class="tab-category flex items-center gap-2 px-4 md:px-5 py-2 rounded-full border border-gray-300 bg-white text-gray-700 font-medium whitespace-nowrap transition hover:shadow flex-shrink-0"
-                        data-cat="{{ $kat->id }}">
+                        data-cat="{{ $kat->id }}" style="border-color: #074b88;">
 
                         <img src="{{ asset('storage/' . $kat->icon) }}" class="w-5 h-5">
 
@@ -89,7 +166,8 @@
         </div>
 
         <div class="container mx-auto px-4 mt-6">
-            <h2 id="categoryTitle" class="text-xl font-bold text-gray-800 border-l-4 border-orange-500 pl-3 mb-4">
+            <h2 id="categoryTitle" class="text-xl font-bold text-gray-800 border-l-4 pl-3 mb-4"
+                style="border-color: #074b88;">
                 Makanan</h2>
             <div id="menuList" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
 
@@ -98,16 +176,16 @@
     </main>
 
     <!-- FLOATING CART BUTTON -->
-    <div id="floatCartBtn" class="float-cart">
-        <i class="fas fa-shopping-bag text-2xl"></i>
-        <span id="cartCountBadge">0</span>
+    <div id="floatCartBtn" class="float-cart" style="background-color: #074b88;">
+        <i class="fas fa-shopping-bag text-2xl text-white"></i>
+        <span id="cartCountBadge" style="background-color: #063d6e;">0</span>
     </div>
 
     <!-- BOTTOM SHEET OVERLAY & SHEET -->
     <div id="sheetOverlay" class="sheet-overlay"></div>
     <div id="bottomSheet" class="bottom-sheet">
         <div class="sticky top-0 bg-white rounded-t-2xl border-b px-5 py-3 flex justify-between items-center">
-            <h3 class="font-bold text-lg">Tambah Pesanan</h3>
+            <h3 class="font-bold text-lg" style="color: #074b88;">Tambah Pesanan</h3>
             <button id="closeSheetBtn" class="text-gray-500 text-2xl"><i class="fas fa-times-circle"></i></button>
         </div>
         <div class="p-5">
@@ -116,7 +194,7 @@
                     class="w-16 h-16 rounded-xl object-cover bg-gray-100">
                 <div>
                     <h4 id="sheetMenuName" class="font-bold text-gray-800">Nama Menu</h4>
-                    <p id="sheetMenuPrice" class="text-orange-600 font-semibold">Rp 0</p>
+                    <p id="sheetMenuPrice" class="font-semibold" style="color: #074b88;">Rp 0</p>
                 </div>
             </div>
             <div class="flex items-center justify-between bg-gray-100 rounded-full p-2 mb-6">
@@ -127,8 +205,15 @@
                     class="w-10 h-10 rounded-full bg-white shadow text-xl font-bold text-gray-700">+</button>
             </div>
             <button id="addToCartBtn"
-                class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-2xl transition flex items-center justify-center gap-2"><i
-                    class="fas fa-cart-plus"></i>Tambahkan Pesanan</button>
+                class="w-full text-white font-bold py-3 rounded-2xl transition flex items-center justify-center gap-2"
+                style="background-color: #074b88;">
+                <i class="fas fa-cart-plus"></i>Tambahkan Pesanan
+            </button>
+            <button id="addToCartBtn"
+                class="w-full text-white font-bold py-3 rounded-2xl transition flex items-center justify-center gap-2 mt-2"
+                style="background-color: #063d6e;">
+                <i class="fas fa-cart-plus"></i>Tambahkan Pesanan (Gelap)
+            </button>
         </div>
     </div>
 
@@ -142,7 +227,7 @@
 
             <!-- HEADER -->
             <div class="flex justify-between items-center p-4 border-b">
-                <h5 class="font-semibold text-lg flex items-center gap-2">
+                <h5 class="font-semibold text-lg flex items-center gap-2" style="color: #074b88;">
                     <i class="fas fa-bag-shopping"></i> Keranjang Belanja
                 </h5>
                 <button id="closeCartModal" class="text-gray-500 text-xl">&times;</button>
@@ -156,14 +241,15 @@
             <!-- FOOTER -->
             <div class="flex justify-between items-center p-4 border-t">
                 <div class="text-sm font-medium">
-                    Total: <span id="cartTotalFooter">Rp 0</span>
+                    Total: <span id="cartTotalFooter" style="color: #074b88;">Rp 0</span>
                 </div>
 
                 <div class="flex gap-2">
                     <button id="closeCartBtn" class="px-4 py-2 bg-gray-200 rounded-lg">
                         Tutup
                     </button>
-                    <button id="checkoutBtn" class="px-4 py-2 bg-orange-500 text-white rounded-lg">
+                    <button id="checkoutBtn" class="px-4 py-2 text-white rounded-lg"
+                        style="background-color: #074b88;">
                         Checkout
                     </button>
                 </div>
@@ -175,10 +261,11 @@
     <div id="paymentModal" class="fixed inset-0 hidden items-center justify-center bg-black/50 z-50">
         <div class="bg-white rounded-2xl p-6 w-80 text-center animate-scale">
             <div id="paymentIcon" class="text-5xl mb-3"></div>
-            <h3 id="paymentTitle" class="text-xl font-bold mb-2"></h3>
+            <h3 id="paymentTitle" class="text-xl font-bold mb-2" style="color: #074b88;"></h3>
             <p id="paymentDesc" class="text-gray-500 mb-4"></p>
 
-            <button onclick="closePaymentModal()" class="w-full bg-orange-500 text-white py-2 rounded-xl">
+            <button onclick="closePaymentModal()" class="w-full text-white py-2 rounded-xl"
+                style="background-color: #074b88;">
                 OK
             </button>
         </div>
@@ -270,25 +357,31 @@
 
             if (firstTab.length) {
                 activeCategory = firstTab.data('cat');
-                firstTab.addClass('bg-orange-500 text-white active').removeClass('bg-white text-gray-700');
+                firstTab.addClass('bg-[#074b88] text-white active').removeClass('bg-white text-gray-700');
                 loadMenu(activeCategory);
                 $('#categoryTitle').text(firstTab.text());
             }
 
             $(document).on('click', '.tab-category', function() {
 
+                // Reset semua tab ke tampilan default
                 $('.tab-category')
-                    .removeClass('bg-orange-500 text-white')
-                    .addClass('bg-white text-gray-700');
+                    .removeClass('bg-theme-primary text-white')
+                    .addClass('bg-white text-gray-700')
+                    .css('border-color', '#074b88');
 
+                // Aktifkan tab yang diklik
                 $(this)
-                    .addClass('bg-orange-500 text-white')
+                    .addClass('bg-theme-primary text-white')
                     .removeClass('bg-white text-gray-700');
 
+                // Simpan kategori aktif
                 activeCategory = $(this).data('cat');
 
+                // Update title kategori (ambil teks dari tab yang aktif)
                 $('#categoryTitle').text($(this).text());
 
+                // Load menu berdasarkan kategori
                 loadMenu(activeCategory);
             });
 

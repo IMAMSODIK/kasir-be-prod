@@ -63,7 +63,7 @@ body {
   position: fixed;
   bottom: 28px;
   right: 20px;
-  background-color: #ef4444;
+  background-color: #074B88;
   color: white;
   width: 60px;
   height: 60px;
@@ -81,7 +81,7 @@ body {
   position: absolute;
   top: -6px;
   right: -6px;
-  background-color: #facc15;
+  background-color: white;
   color: #1e293b;
   font-weight: bold;
   font-size: 14px;
@@ -94,13 +94,13 @@ body {
 
 .float-cart:hover {
   transform: scale(1.05);
-  background-color: #dc2626;
+  background-color: #074B88;
 }
 
 .tab-active {
-  background-color: #f97316;
+  background-color: black;
   color: white;
-  border-color: #f97316;
+  border-color: #074B88;
 }
 
 .menu-card {
@@ -167,7 +167,7 @@ html {
 
 .modal-title i {
   background: none;
-  color: #f97316;
+  color: #074B88;
   margin-right: 8px;
 }
 
@@ -305,7 +305,7 @@ html {
 
 .remove-item:hover {
   background: #fee2e2;
-  color: #e11d48;
+  color: #074B88;
   transform: scale(1.03);
 }
 
@@ -353,7 +353,7 @@ html {
 }
 
 .float-cart span {
-  background: #f97316;
+  background: #074B88;
   color: white;
   font-weight: 700;
   border-radius: 60px;
