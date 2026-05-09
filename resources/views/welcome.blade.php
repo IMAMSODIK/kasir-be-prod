@@ -216,11 +216,6 @@
                 style="background-color: #074b88;">
                 <i class="fas fa-cart-plus"></i>Tambahkan Pesanan
             </button>
-            <button id="addToCartBtn"
-                class="w-full text-white font-bold py-3 rounded-2xl transition flex items-center justify-center gap-2 mt-2"
-                style="background-color: #063d6e;">
-                <i class="fas fa-cart-plus"></i>Tambahkan Pesanan (Gelap)
-            </button>
         </div>
     </div>
 
