@@ -1,7 +1,7 @@
 <div class="sidebar-wrapper" data-layout="stroke-svg">
     <div class="logo-wrapper">
-        <a href="/dashboard">
-            <img class="img-fluid" style="width: 85px; margin-top: -10px"
+        <a href="/dashboard" class="d-flex align-items-center gap-2 text-decoration-none">
+            <img class="img-fluid" style="width: 55px; margin-top: -10px"
                 src="{{ asset('dashboard_assets/assets/images/logo/logo.png') }}" alt="">
         </a>
         <div class="back-btn"><i class="fa fa-angle-left"> </i></div>
@@ -71,7 +71,8 @@
                     </a>
                     <ul class="sidebar-submenu" style="display: none;">
                         <li><a href="/kategori-menu"><i class="fa fa-list me-2"></i> Kategori Menu</a></li>
-                        <li><a href="/daftar-menu"><i class="fa fa-cutlery me-2" aria-hidden="true"></i> Daftar Menu</a></li>
+                        <li><a href="/daftar-menu"><i class="fa fa-cutlery me-2" aria-hidden="true"></i> Daftar Menu</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -95,8 +96,10 @@
                         <div class="according-menu"><i class="fa fa-angle-right"></i></div>
                     </a>
                     <ul class="sidebar-submenu" style="display: none;">
-                        <li><a href="/daftar-order"><i class="fa fa-shopping-cart text-white me-2"></i> Daftar Order</a></li>
-                        <li><a href="/riwayat-order"><i class="fa fa-history text-white me-2"></i> Riwayat Order</a></li>
+                        <li><a href="/daftar-order"><i class="fa fa-shopping-cart text-white me-2"></i> Daftar Order</a>
+                        </li>
+                        <li><a href="/riwayat-order"><i class="fa fa-history text-white me-2"></i> Riwayat Order</a>
+                        </li>
                     </ul>
                 </li>
 

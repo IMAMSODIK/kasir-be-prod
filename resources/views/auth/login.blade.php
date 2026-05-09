@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Learning Platform</title>
+    <title>Universitas Kopi</title>
     <link rel="stylesheet" href="{{ asset('auth_assets/css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -58,14 +58,14 @@
         <div class="image-section">
             <div class="floating-card">
                 <div class="logo">
-                    <img src="{{ asset('own_assets/logo/logo.png') }}" alt="">
+                    <h2 style="color: #074b88">Universitas Kopi</h2>
                 </div>
             </div>
-            <h2>Unlock Your English Potential</h2>
-            <p>"Take smart notes that help you remember better. Track your progress and see your improvement!"</p>
+            <h2>Sajikan Kebahagiaan dalam Setiap Cangkir</h2>
+            <p>"Dari biji kopi terbaik, kami ciptakan kenikmatan sejati yang menemani setiap momen spesialmu."</p>
             <div style="margin-top: 20px; font-size: 14px; opacity: 0.8;">
-                <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i>
-                Yanks & Brits Managements
+                <i class="fas fa-store" style="margin-right: 5px;"></i>
+                Universtias Kopi Management
             </div>
         </div>
 
@@ -74,8 +74,8 @@
                 <img src="{{ asset('own_assets/logo/logo.png') }}" alt="" width="40%">
             </h2>
             <div class="tabs">
-                <div class="tab active" onclick="switchTab('login')">Student Login</div>
-                <div class="tab" onclick="switchTab('register')">Register</div>
+                <div class="tab active" onclick="switchTab('login')">Admin Login</div>
+                {{-- <div class="tab" onclick="switchTab('register')">Register</div> --}}
             </div>
 
             <!-- Form Login -->
@@ -90,25 +90,25 @@
                 <div class="input-group">
                     <label for="login-email"><i class="fas fa-user" style="margin-right: 5px;"></i>
                         Email</label>
-                    <input type="email" id="login-email" placeholder="Enter your email">
+                    <input type="email" id="login-email" placeholder="Masukkan email kamu">
                 </div>
 
                 <div class="input-group">
                     <label for="login-password"><i class="fas fa-lock" style="margin-right: 5px;"></i> Password</label>
-                    <input type="password" id="login-password" placeholder="Enter your password">
+                    <input type="password" id="login-password" placeholder="*****">
                 </div>
 
                 <div class="forgot-password">
-                    <a href="{{ route('password.request') }}"><i class="fas fa-key" style="margin-right: 3px;"></i> Forgot password?</a>
+                    <a href="{{ route('password.request') }}"><i class="fas fa-key" style="margin-right: 3px;"></i>
+                        Lupa password?</a>
                 </div>
 
                 <button class="btn text-white" type="button" id="login-submit"><i class="fas fa-sign-in-alt"
-                        style="margin-right: 8px;"></i> Continue
-                    Learning</button>
+                        style="margin-right: 8px;"></i> Login</button>
             </div>
 
             <!-- Form Register -->
-            <div id="register-form" class="form">
+            {{-- <div id="register-form" class="form">
                 <h2 class="title">Start Your English Journey</h2>
 
                 <!-- Error message container -->
@@ -128,7 +128,6 @@
                 <div class="input-group">
                     <label for="register-email"><i class="fas fa-at me-2"></i> Email</label>
                     <input type="email" id="register-email" placeholder="Enter your email">
-                    {{-- <small class="form-text text-muted">Letters, numbers, and underscores only</small> --}}
                 </div>
 
                 <div class="input-group">
@@ -144,7 +143,7 @@
                 <button class="btn btn-primary mt-3" id="register">
                     <i class="fas fa-user-plus me-2"></i> Join Now
                 </button>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -332,8 +331,7 @@
                             response.errors
                         );
                     } else {
-                        showRegisterError('An error occurred. Please try again.'
-                        );
+                        showRegisterError('An error occurred. Please try again.');
                     }
                 }
             });
@@ -364,7 +362,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        
+
         function showOtpModal() {
             $('#otpModal').fadeIn();
 

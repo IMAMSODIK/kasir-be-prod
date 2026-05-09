@@ -7,7 +7,7 @@
 
 /* Background utama dengan gradien dan pattern halus */
 body {
-    background-image: url(../images/bg.png);
+    background-image: url(../images/bg.jpg);
     background-size: cover;
     background-position: center;
     min-height: 100vh;
@@ -21,7 +21,7 @@ body {
 /* Untuk mobile - gunakan gambar yang lebih kecil/alternatif */
 @media (max-width: 768px) {
     body {
-        background-image: url(../images/bg.png); /* File khusus mobile */
+        background-image: url(../images/bg.jpg); /* File khusus mobile */
         background-size: cover;
     }
     
@@ -49,8 +49,8 @@ body {
 .image-section {
     flex: 1;
     background:
-        linear-gradient(135deg, rgba(73, 73, 73, 0.9), rgba(43, 42, 42, 0.9)),
-        url('https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80') center/cover;
+        linear-gradient(135deg, rgba(17, 84, 138, 0.7), rgba(43, 42, 42, 0.7)),
+        url('../images/banner.jpeg') center/cover;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -166,7 +166,7 @@ body {
 }
 
 .tab.active {
-    background: linear-gradient(to right, #2980b9, #3498db);
+    background: linear-gradient(to right, #074B88, #042847);
     color: white;
     box-shadow: 0 2px 5px rgba(41, 128, 185, 0.3);
 }
@@ -223,7 +223,7 @@ body {
 }
 
 .input-group input:focus {
-    border-color: #3498db;
+    border-color: #042847;
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
     outline: none;
     background-color: white;
@@ -235,7 +235,7 @@ body {
 }
 
 .forgot-password a {
-    color: #2980b9;
+    color: #074B88;
     text-decoration: none;
     font-size: 14px;
     transition: all 0.2s;
@@ -251,7 +251,7 @@ body {
     padding: 12px;
     border: none;
     border-radius: 8px;
-    background: linear-gradient(to right, #2980b9, #3498db);
+    background: linear-gradient(to right, #074B88, #042847);
     color: white;
     font-size: 16px;
     font-weight: 600;
@@ -261,7 +261,7 @@ body {
 }
 
 .btn:hover {
-    background: linear-gradient(to right, #2472a4, #2980b9);
+    background: linear-gradient(to right, #2472a4, #074B88);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
 }
