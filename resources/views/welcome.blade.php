@@ -597,24 +597,24 @@
                                 <div class="flex flex-col items-end gap-2">
 
                                     <!-- HARGA -->
-                                    <span class="font-semibold text-orange-600">
+                                    <span class="font-semibold" style="color: #074b88;">
                                         Rp ${formatRupiah(subtotal)}
                                     </span>
 
                                     <!-- QTY CONTROL -->
                                     <div class="flex items-center gap-2 bg-gray-100 rounded-lg px-2 py-1">
 
-                                        <button class="qty-minus text-lg px-2" data-id="${item.id}">-</button>
+                                        <button class="qty-minus text-lg px-2 hover:text-[#074b88] transition-colors" data-id="${item.id}" style="color: #4b5563;">-</button>
 
-                                        <span class="w-6 text-center">${item.qty}</span>
+                                        <span class="w-6 text-center font-medium">${item.qty}</span>
 
-                                        <button class="qty-plus text-lg px-2" data-id="${item.id}">+</button>
+                                        <button class="qty-plus text-lg px-2 hover:text-[#074b88] transition-colors" data-id="${item.id}" style="color: #4b5563;">+</button>
 
                                     </div>
 
                                     <!-- DELETE -->
-                                    <button class="btn-remove text-red-500 text-sm" data-id="${item.id}">
-                                        Hapus
+                                    <button class="btn-remove text-red-500 text-sm hover:text-red-700 transition-colors" data-id="${item.id}">
+                                        <i class="fas fa-trash-alt mr-1"></i> Hapus
                                     </button>
 
                                 </div>
