@@ -39,6 +39,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/users/restore/{id}', [UserController::class, 'restore']);
     Route::delete('/users/destroy/{id}', [UserController::class, 'destroy']);
 
+    Route::get('/daftar-order', [OrderController::class, 'index']);
+    Route::get('/orders/pending', [OrderController::class, 'pending']);
+    Route::get('/orders/done', [OrderController::class, 'done']);
+    Route::post('/orders/{id}/selesai', [OrderController::class, 'selesai']);
+    Route::post('/orders/{id}/batalkan', [OrderController::class, 'batalkan']);
+    Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+
     Route::get('/meja', [MejaController::class, 'index']);
     Route::get('/meja/data', [MejaController::class, 'data']);
     Route::get('/meja/download-qrcode', [MejaController::class, 'download']);

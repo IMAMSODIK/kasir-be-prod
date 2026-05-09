@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
@@ -13,6 +14,10 @@ class Order extends Model
     protected $guarded = [
         'id'
     ];
+
+    public function meja(): BelongsTo{
+        return $this->belongsTo(Meja::class);
+    }
 
     public function items()
     {

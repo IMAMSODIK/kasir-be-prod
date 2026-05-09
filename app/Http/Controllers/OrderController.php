@@ -14,6 +14,7 @@ use Midtrans\Config;
 
 class OrderController extends Controller
 {
+    // midtrans
     public function __construct()
     {
         Config::$serverKey = config('midtrans.server_key');
@@ -110,7 +111,7 @@ class OrderController extends Controller
             ], 500);
         }
     }
-    
+
     public function checkStatus($orderId)
     {
         $order = Order::where('order_id', $orderId)->first();
@@ -121,6 +122,142 @@ class OrderController extends Controller
 
         return response()->json([
             'status' => $order->status
+        ]);
+    }
+    // end midtrans
+
+
+    // utils
+    public function index()
+    {
+        return view('order.index', [
+            'pageTitle' => 'Data Order'
+        ]);
+    }
+
+    public function pending(Request $request)
+    {
+        $keyword = $request->keyword;
+
+        $orders = Order::with([
+                'items',
+                'meja'
+            ])
+            ->when($keyword, function ($q) use ($keyword) {
+
+                $q->where(function ($query) use ($keyword) {
+
+                    $query->where('order_id', 'like', "%{$keyword}%")
+                        ->orWhere('customer_name', 'like', "%{$keyword}%");
+
+                });
+
+            })
+            ->whereIn('status', [
+                'pending',
+                'challenge'
+            ])
+            ->latest()
+            ->get();
+
+        return response()->json($orders);
+    }
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ORDER SELESAI
+    |--------------------------------------------------------------------------
+    */
+    public function done(Request $request)
+    {
+        $keyword = $request->keyword;
+
+        $limit = $request->limit ?? 10;
+
+        $orders = Order::with([
+                'items',
+                'meja'
+            ])
+            ->when($keyword, function ($q) use ($keyword) {
+
+                $q->where(function ($query) use ($keyword) {
+
+                    $query->where('order_id', 'like', "%{$keyword}%")
+                        ->orWhere('customer_name', 'like', "%{$keyword}%");
+
+                });
+
+            })
+            ->whereIn('status', [
+                'paid',
+                'cancelled',
+                'deny',
+                'expired'
+            ])
+            ->latest()
+            ->paginate($limit);
+
+        return response()->json($orders);
+    }
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SELESAIKAN ORDER
+    |--------------------------------------------------------------------------
+    */
+    public function selesai($id)
+    {
+        $order = Order::findOrFail($id);
+
+        $order->status = 'paid';
+        $order->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order berhasil diselesaikan'
+        ]);
+    }
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | BATALKAN ORDER
+    |--------------------------------------------------------------------------
+    */
+    public function batalkan($id)
+    {
+        $order = Order::findOrFail($id);
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order berhasil dibatalkan'
+        ]);
+    }
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HAPUS ORDER
+    |--------------------------------------------------------------------------
+    */
+    public function destroy($id)
+    {
+        $order = Order::findOrFail($id);
+
+        $order->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order berhasil dihapus'
         ]);
     }
 }
