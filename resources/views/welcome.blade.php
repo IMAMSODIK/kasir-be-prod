@@ -91,7 +91,9 @@
                 <img src="{{ asset('own_assets/logo/logo.png') }}" class="h-8 md:h-10 w-auto">
                 <div>
                     <span class="text-base md:text-lg font-bold" style="color: #074b88;">Universitas Kopi</span>
-                    <i><p class="text-xs text-gray-500 hidden md:block">#MAKEEVERYONEHAPPY</p></i>
+                    <i>
+                        <p class="text-xs text-gray-500 hidden md:block">#MAKEEVERYONEHAPPY</p>
+                    </i>
                 </div>
             </div>
             <button id="closeSidebarBtn"
@@ -111,12 +113,15 @@
             </h3>
             <div class="space-y-2 text-sm text-gray-600">
                 <p><i class="fab fa-whatsapp w-5 text-green-600"></i> +62 822-7344-8313</p>
-                <p><i class="fas fa-map-marker-alt w-5 text-gray-600"></i> Jl. Prada, Peurada, Kec. Syiah Kuala, Kota Banda Aceh</p>
+                <p><i class="fas fa-map-marker-alt w-5 text-gray-600"></i> Jl. Prada, Peurada, Kec. Syiah Kuala, Kota
+                    Banda Aceh</p>
             </div>
             <div class="flex mt-4 space-x-3">
-                <a href="https://www.instagram.com/universitaskopi.id" target="_blank"><i class="fab fa-instagram text-2xl text-pink-500"></i></a>
+                <a href="https://www.instagram.com/universitaskopi.id" target="_blank"><i
+                        class="fab fa-instagram text-2xl text-pink-500"></i></a>
                 <a href="" target="_blank"><i class="fab fa-facebook text-2xl text-blue-700"></i></a>
-                <a href="https://www.tiktok.com/@universitaskopi.id?_r=1&_t=ZS-96CttSm8ef4" target="_blank"><i class="fab fa-tiktok text-2xl text-black"></i></a>
+                <a href="https://www.tiktok.com/@universitaskopi.id?_r=1&_t=ZS-96CttSm8ef4" target="_blank"><i
+                        class="fab fa-tiktok text-2xl text-black"></i></a>
             </div>
         </div>
     </aside>
@@ -131,7 +136,9 @@
                     <img src="{{ asset('own_assets/logo/logo.png') }}" class="h-8 md:h-9 w-auto">
                     <div>
                         <span class="font-bold text-base md:text-lg" style="color: #074b88;">Universitas Kopi</span>
-                        <i><p class="text-xs text-gray-500 hidden md:block">#MAKEEVERYONEHAPPY</p></i>
+                        <i>
+                            <p class="text-xs text-gray-500 hidden md:block">#MAKEEVERYONEHAPPY</p>
+                        </i>
                     </div>
                 </div>
             </div>
@@ -418,11 +425,12 @@
 
                                 <div class="p-4">
                                     <h3 class="font-bold text-gray-800">${menu.nama_menu}</h3>
-                                    <p class="text-orange-600 font-semibold mt-1">
+                                    <p class="font-semibold mt-1" style="color: #074b88;">
                                         Rp ${formatRupiah(menu.harga)}
                                     </p>
 
-                                    <button class="btn-add mt-3 w-full bg-orange-100 hover:bg-orange-200 text-orange-700 py-2 rounded-xl"
+                                    <button class="btn-add mt-3 w-full py-2 rounded-xl transition" 
+                                        style="background-color: #074b88; color: white;"
                                         data-menu='${JSON.stringify(menu)}'>
                                         Pesan +
                                     </button>
