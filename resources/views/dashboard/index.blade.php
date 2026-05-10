@@ -510,12 +510,9 @@
                         <div class="card-header total-revenue card-no-border">
                             <h4>Latest Orders</h4>
                             <div class="d-flex align-items-center gap-2">
-                                <span class="update-data d-none d-md-block f-light">
-                                    Update realtime transaksi terbaru
-                                </span>
-                                <button class="btn btn-primary btn-sm refresh-latest-orders">
-                                    <i class="fa fa-refresh"></i>
-                                </button>
+                                <a href="/daftar-order" class="btn btn-primary btn-sm refresh-latest-orders">
+                                    Detail
+                                </a>
                             </div>
                         </div>
                         <div class="card-body pt-0">
@@ -594,112 +591,6 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <div class="modal fade" id="modalOrder{{ $order->id }}" tabindex="-1">
-                                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                                    <div class="modal-content border-0">
-                                                        <div class="modal-header bg-primary text-white">
-                                                            <div>
-                                                                <h5 class="modal-title">
-                                                                    Detail Order
-                                                                </h5>
-                                                                <small>
-                                                                    {{ $order->order_id }}
-                                                                </small>
-                                                            </div>
-                                                            <button type="button" class="btn-close btn-close-white"
-                                                                data-bs-dismiss="modal"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row mb-4">
-                                                                <div class="col-md-4">
-                                                                    <small class="text-muted">
-                                                                        Customer
-                                                                    </small>
-                                                                    <div class="fw-semibold">
-                                                                        {{ $order->customer_name ?? 'Customer Umum' }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <small class="text-muted">
-                                                                        Meja
-                                                                    </small>
-                                                                    <div class="fw-semibold">
-                                                                        {{ $order->meja->nama_meja ?? '-' }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <small class="text-muted">
-                                                                        Status
-                                                                    </small>
-                                                                    <div>
-                                                                        <span class="badge bg-primary">
-                                                                            {{ ucfirst($order->status) }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="table-responsive">
-                                                                <table class="table align-middle">
-                                                                    <thead class="table-light">
-                                                                        <tr>
-                                                                            <th>Menu</th>
-                                                                            <th>Harga</th>
-                                                                            <th>Qty</th>
-                                                                            <th>Subtotal</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @foreach ($order->items as $item)
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div class="fw-semibold">
-                                                                                        {{ $item->nama_menu }}
-                                                                                    </div>
-                                                                                    @if ($item->note)
-                                                                                        <small class="text-muted">
-                                                                                            {{ $item->note }}
-                                                                                        </small>
-                                                                                    @endif
-                                                                                </td>
-                                                                                <td>
-                                                                                    Rp
-                                                                                    {{ number_format($item->harga, 0, ',', '.') }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ $item->qty }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    Rp
-                                                                                    {{ number_format($item->harga * $item->qty, 0, ',', '.') }}
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                            <div class="text-end mt-4">
-                                                                <h4 class="fw-bold text-primary">
-                                                                    Rp {{ number_format($order->total_amount, 0, ',', '.') }}
-                                                                </h4>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button class="btn btn-success">
-                                                                <i class="fa fa-check me-2"></i>
-                                                                Selesaikan
-                                                            </button>
-                                                            <button class="btn btn-warning text-white">
-                                                                <i class="fa fa-print me-2"></i>
-                                                                Print
-                                                            </button>
-                                                            <button class="btn btn-danger">
-                                                                <i class="fa fa-times me-2"></i>
-                                                                Batalkan
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         @empty
                                             <tr>
                                                 <td colspan="5">
