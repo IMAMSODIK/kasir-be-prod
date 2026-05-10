@@ -95,14 +95,6 @@ class DashboardController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | MEJA
-            |--------------------------------------------------------------------------
-            */
-            $totalTables = Meja::count();
-            $activeTables = Meja::where('status', true)->count();
-
-            /*
-            |--------------------------------------------------------------------------
             | BEST SELLER MENU
             |--------------------------------------------------------------------------
             */
@@ -147,6 +139,14 @@ class DashboardController extends Controller
                 ];
             }
 
+            $latestOrders = Order::with([
+                'items',
+                'meja'
+            ])
+                ->latest()
+                ->take(10)
+                ->get();
+
 
             $data = [
                 'pageTitle' => 'Dashboard',
@@ -168,11 +168,8 @@ class DashboardController extends Controller
                     'ready' => $readyMenus,
                     'empty' => $emptyMenus,
                 ],
-                'tables' => [
-                    'total' => $totalTables,
-                    'active' => $activeTables,
-                ],
                 'bestSellerMenus' => $bestSellerMenus,
+                'latestOrders' => $latestOrders,
                 'revenue_chart' => $chartData,
             ];
 

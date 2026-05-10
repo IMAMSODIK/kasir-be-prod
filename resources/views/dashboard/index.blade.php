@@ -505,6 +505,216 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-xxl-6 col-md-12 box-col-12">
+                    <div class="card height-equal">
+                        <div class="card-header total-revenue card-no-border">
+                            <h4>Latest Orders</h4>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="update-data d-none d-md-block f-light">
+                                    Update realtime transaksi terbaru
+                                </span>
+                                <button class="btn btn-primary btn-sm refresh-latest-orders">
+                                    <i class="fa fa-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="table-order table-responsive custom-scrollbar">
+                                <table class="latest-orders w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Detail</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($latestOrders as $order)
+                                            <tr>
+                                                <td>
+                                                    <div class="product-name">
+                                                        <img class="order-table-images img-fluid"
+                                                            src="{{ asset('dashboard_assets/assets/images/dashboard/order-table/1.png') }}"
+                                                            alt="order">
+                                                        <div class="product-sub">
+                                                            <a class="f-14 f-w-500" href="#">
+                                                                {{ $order->order_id }}
+                                                            </a>
+                                                            <span class="f-light f-14 f-w-500 d-block">
+                                                                {{ $order->created_at->format('d M Y H:i') }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="product-sub">
+                                                        <a class="f-14 f-w-500" href="#">
+                                                            {{ $order->customer_name ?? 'Customer Umum' }}
+                                                        </a>
+                                                        <span class="f-light f-14 f-w-500 d-block">
+                                                            {{ $order->meja->nama_meja ?? 'Tanpa Meja' }}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="product-sub">
+                                                        <a class="f-14 f-w-500" href="#">
+                                                            Rp {{ number_format($order->total_amount, 0, ',', '.') }}
+                                                        </a>
+                                                        <span class="f-light f-14 f-w-500 d-block">
+                                                            {{ $order->items->sum('qty') }} Item
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        $badge = match ($order->status) {
+                                                            'paid' => 'success',
+                                                            'pending' => 'warning',
+                                                            'cancelled' => 'danger',
+                                                            'expired' => 'secondary',
+                                                            default => 'primary',
+                                                        };
+                                                    @endphp
+                                                    <div
+                                                        class="badge-light-{{ $badge }} product-sub badge rounded-pill">
+                                                        <span>
+                                                            {{ ucfirst($order->status) }}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="product-sub">
+                                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#modalOrder{{ $order->id }}">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <div class="modal fade" id="modalOrder{{ $order->id }}" tabindex="-1">
+                                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                                    <div class="modal-content border-0">
+                                                        <div class="modal-header bg-primary text-white">
+                                                            <div>
+                                                                <h5 class="modal-title">
+                                                                    Detail Order
+                                                                </h5>
+                                                                <small>
+                                                                    {{ $order->order_id }}
+                                                                </small>
+                                                            </div>
+                                                            <button type="button" class="btn-close btn-close-white"
+                                                                data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row mb-4">
+                                                                <div class="col-md-4">
+                                                                    <small class="text-muted">
+                                                                        Customer
+                                                                    </small>
+                                                                    <div class="fw-semibold">
+                                                                        {{ $order->customer_name ?? 'Customer Umum' }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <small class="text-muted">
+                                                                        Meja
+                                                                    </small>
+                                                                    <div class="fw-semibold">
+                                                                        {{ $order->meja->nama_meja ?? '-' }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <small class="text-muted">
+                                                                        Status
+                                                                    </small>
+                                                                    <div>
+                                                                        <span class="badge bg-primary">
+                                                                            {{ ucfirst($order->status) }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="table-responsive">
+                                                                <table class="table align-middle">
+                                                                    <thead class="table-light">
+                                                                        <tr>
+                                                                            <th>Menu</th>
+                                                                            <th>Harga</th>
+                                                                            <th>Qty</th>
+                                                                            <th>Subtotal</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($order->items as $item)
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <div class="fw-semibold">
+                                                                                        {{ $item->nama_menu }}
+                                                                                    </div>
+                                                                                    @if ($item->note)
+                                                                                        <small class="text-muted">
+                                                                                            {{ $item->note }}
+                                                                                        </small>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                    Rp
+                                                                                    {{ number_format($item->harga, 0, ',', '.') }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $item->qty }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    Rp
+                                                                                    {{ number_format($item->harga * $item->qty, 0, ',', '.') }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="text-end mt-4">
+                                                                <h4 class="fw-bold text-primary">
+                                                                    Rp {{ number_format($order->total_amount, 0, ',', '.') }}
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-success">
+                                                                <i class="fa fa-check me-2"></i>
+                                                                Selesaikan
+                                                            </button>
+                                                            <button class="btn btn-warning text-white">
+                                                                <i class="fa fa-print me-2"></i>
+                                                                Print
+                                                            </button>
+                                                            <button class="btn btn-danger">
+                                                                <i class="fa fa-times me-2"></i>
+                                                                Batalkan
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5">
+                                                    <div class="alert alert-warning mb-0 text-center">
+                                                        Belum ada transaksi
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
