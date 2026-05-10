@@ -2,90 +2,90 @@
 
 @section('own_style')
     <style>
-        .order-list{
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-}
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
 
-.order-item{
-    background:#fff;
-    border-radius:18px;
-    padding:18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
-    transition:.2s;
-    cursor:pointer;
-}
+        .order-item {
+            background: #fff;
+            border-radius: 18px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .06);
+            transition: .2s;
+            cursor: pointer;
+        }
 
-.order-item:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 25px rgba(0,0,0,.10);
-}
+        .order-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .10);
+        }
 
-.order-item-left{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
+        .order-item-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-.order-icon{
-    width:55px;
-    height:55px;
-    border-radius:16px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    font-size:20px;
-}
+        .order-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+        }
 
-.order-item-right{
-    text-align:right;
-}
+        .order-item-right {
+            text-align: right;
+        }
 
-.search-order{
-    height:50px;
-    border-radius:14px;
-    padding-left:45px;
-    border:none;
-    box-shadow:0 4px 12px rgba(0,0,0,.06);
-}
+        .search-order {
+            height: 50px;
+            border-radius: 14px;
+            padding-left: 45px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
+        }
 
-.search-order:focus{
-    box-shadow:0 4px 20px rgba(0,0,0,.10);
-    border:none;
-}
+        .search-order:focus {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .10);
+            border: none;
+        }
 
-.search-icon{
-    position:absolute;
-    left:16px;
-    top:50%;
-    transform:translateY(-50%);
-    color:#999;
-    z-index:10;
-}
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            z-index: 10;
+        }
 
-.modal-content{
-    border-radius:20px;
-}
+        .modal-content {
+            border-radius: 20px;
+        }
 
-@media(max-width:768px){
+        @media(max-width:768px) {
 
-    .order-item{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:15px;
-    }
+            .order-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
 
-    .order-item-right{
-        width:100%;
-        text-align:left;
-    }
+            .order-item-right {
+                width: 100%;
+                text-align: left;
+            }
 
-}
+        }
     </style>
 @endsection
 
@@ -125,7 +125,7 @@
                 </li>
                 <li class="nav-item">
                     <button class="nav-link" id="detail-tab" data-bs-toggle="tab" data-bs-target="#detail">
-                        Arsip Terhapus
+                        Order Selesai
                     </button>
                 </li>
             </ul>

@@ -89,18 +89,11 @@
                     </a>
                 </li>
 
-                <li class="sidebar-list" style="cursor: pointer">
-                    <a class="sidebar-link sidebar-title">
-                        <i class="fa fa-shopping-cart text-white"></i>
-                        <span class="">Order</span>
-                        <div class="according-menu"><i class="fa fa-angle-right"></i></div>
+                <li class="sidebar-list">
+                    <a class="sidebar-link sidebar-title link-nav" href="/daftar-order">
+                        <i class="fa fa-shopping-cart text-white" aria-hidden="true"></i>
+                        <span>Daftar Order</span>
                     </a>
-                    <ul class="sidebar-submenu" style="display: none;">
-                        <li><a href="/daftar-order"><i class="fa fa-shopping-cart text-white me-2"></i> Daftar Order</a>
-                        </li>
-                        <li><a href="/riwayat-order"><i class="fa fa-history text-white me-2"></i> Riwayat Order</a>
-                        </li>
-                    </ul>
                 </li>
 
             </ul>
