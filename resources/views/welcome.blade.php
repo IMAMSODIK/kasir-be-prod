@@ -412,25 +412,27 @@
                         }
 
                         html += `
-                <div class="menu-item">
-    <div class="w-full" style="aspect-ratio: 1/1;">
-        <img src="${img}" class="w-full h-full object-contain">
-    </div>
+                            <div class="menu-item">
+                                <div class="w-full" style="aspect-ratio: 1/1;">
+                                    <img src="${img}" 
+                                        class="w-full h-full object-contain"
+                                        style="object-position:center bottom;">
+                                </div>
 
-    <div class="p-4 text-center">
-        <h3 class="font-bold text-gray-800">${menu.nama_menu}</h3>
-        <p class="font-semibold mt-1" style="color: #074b88;">
-            Rp ${formatRupiah(menu.harga)}
-        </p>
+                                <div class="p-4 text-center">
+                                    <h3 class="font-bold text-gray-800">${menu.nama_menu}</h3>
+                                    <p class="font-semibold mt-1" style="color: #074b88;">
+                                        Rp ${formatRupiah(menu.harga)}
+                                    </p>
 
-        <button class="btn-add mt-3 w-full py-2 rounded-xl transition" 
-            style="background-color: #074b88; color: white;"
-            data-menu='${JSON.stringify(menu)}'>
-            Pesan +
-        </button>
-    </div>
-</div>
-            `;
+                                    <button class="btn-add mt-3 w-full py-2 rounded-xl transition" 
+                                        style="background-color: #074b88; color: white;"
+                                        data-menu='${JSON.stringify(menu)}'>
+                                        Pesan +
+                                    </button>
+                                </div>
+                            </div>
+                        `;
                     });
 
                     $('#menuList').html(html);
