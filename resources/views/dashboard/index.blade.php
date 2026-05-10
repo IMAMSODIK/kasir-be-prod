@@ -446,7 +446,7 @@
                                             <div>
                                                 <img class="img-fluid product-img"
                                                     src="{{ optional($menu->menu->fotoMenus->first())->foto_path
-                                                        ? asset($menu->menu->fotoMenus->first()->foto_path)
+                                                        ? asset('storage/' . $menu->menu->fotoMenus->first()->foto_path)
                                                         : asset('no-image.png') }}"
                                                     alt="{{ $menu->nama_menu }}">
                                             </div>
