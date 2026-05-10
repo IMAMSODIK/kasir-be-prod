@@ -112,7 +112,7 @@
 
                                     <div class="text-warning f-w-700">
                                         <i class="fa fa-arrow-up me-1"></i>
-                                        {{ $growthRevenue ?? 0 }}%
+                                        {{ $revenue['growthRevenue'] ?? 0 }}%
                                     </div>
                                 </div>
 
