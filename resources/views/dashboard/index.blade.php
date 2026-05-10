@@ -2,11 +2,31 @@
 
 @section('own_style')
     <style>
+        .size-column {
+            display: flex;
+            align-items: stretch;
+        }
+
+        .size-column>div {
+            display: flex;
+        }
+
+        .size-column .card {
+            width: 100%;
+        }
+
+        #revenueChart {
+            height: 250px !important;
+        }
+
         .revenue-card {
             border-radius: 24px;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 260px;
             position: relative;
+            height: 360px;
+            min-height: 360px;
+            max-height: 360px;
+            overflow: hidden;
         }
 
         .revenue-icon-bg {
@@ -94,10 +114,10 @@
 
                                 <div class="mini-info">
                                     <small class="text-white-50 d-block">
-                                        Total Order
+                                        Order Hari Ini
                                     </small>
                                     <span class="text-white f-w-600">
-                                        {{ $revenue['today'] }}
+                                        {{ $orders['today'] }}
                                     </span>
                                 </div>
 
