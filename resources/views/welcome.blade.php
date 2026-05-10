@@ -412,26 +412,25 @@
                         }
 
                         html += `
-                            <div class="menu-card bg-white rounded-2xl shadow hover:shadow-lg overflow-hidden transition">
+                <div class="menu-item">
+                    <div class="w-full aspect-[1/1] overflow-hidden rounded-2xl">
+                        <img src="${img}" class="w-full h-full object-cover">
+                    </div>
 
-                                <div class="w-full aspect-[1/1] overflow-hidden">
-                                    <img src="${img}" class="w-full h-full object-cover">
-                                </div>
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-gray-800">${menu.nama_menu}</h3>
+                        <p class="font-semibold mt-1" style="color: #074b88;">
+                            Rp ${formatRupiah(menu.harga)}
+                        </p>
 
-                                <div class="p-4">
-                                    <h3 class="font-bold text-gray-800">${menu.nama_menu}</h3>
-                                    <p class="font-semibold mt-1" style="color: #074b88;">
-                                        Rp ${formatRupiah(menu.harga)}
-                                    </p>
-
-                                    <button class="btn-add mt-3 w-full py-2 rounded-xl transition" 
-                                        style="background-color: #074b88; color: white;"
-                                        data-menu='${JSON.stringify(menu)}'>
-                                        Pesan +
-                                    </button>
-                                </div>
-                            </div>
-                            `;
+                        <button class="btn-add mt-3 w-full py-2 rounded-xl transition" 
+                            style="background-color: #074b88; color: white;"
+                            data-menu='${JSON.stringify(menu)}'>
+                            Pesan +
+                        </button>
+                    </div>
+                </div>
+            `;
                     });
 
                     $('#menuList').html(html);
