@@ -147,8 +147,6 @@ class DashboardController extends Controller
                 ];
             }
 
-            dd($bestSellerMenus);
-
 
             $data = [
                 'pageTitle' => 'Dashboard',
