@@ -144,7 +144,7 @@ class DashboardController extends Controller
                 'meja'
             ])
                 ->latest()
-                ->take(10)
+                ->take(5)
                 ->get();
 
 

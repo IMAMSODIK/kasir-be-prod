@@ -535,9 +535,6 @@
                                                             <p class="f-14 f-w-500">
                                                                 {{ $order->order_id }}
                                                             </p>
-                                                            <span class="f-light f-14 f-w-500 d-block">
-                                                                {{ $order->created_at->format('d M Y H:i') }}
-                                                            </span>
                                                         </div>
                                                     </div>
                                                 </td>
