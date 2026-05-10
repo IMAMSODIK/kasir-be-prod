@@ -110,7 +110,7 @@ class MenuController extends Controller
             'kategori_menu_id' => 'required|exists:kategori_menus,id',
             'harga' => 'required|numeric',
             'foto_menu' => 'required',
-            'foto_menu.*' => 'image|mimes:jpg,jpeg,png|max:2048',
+            'foto_menu.*' => 'image|mimes:jpg,jpeg,png|max:20480',
         ], [
             'nama_menu.required' => 'Nama menu wajib diisi',
             'nama_menu.unique' => 'Nama menu sudah ada',
