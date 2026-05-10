@@ -524,7 +524,6 @@
                                             <th>Customer</th>
                                             <th>Total</th>
                                             <th>Status</th>
-                                            <th>Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -533,9 +532,9 @@
                                                 <td>
                                                     <div class="product-name">
                                                         <div class="product-sub">
-                                                            <a class="f-14 f-w-500" href="#">
+                                                            <p class="f-14 f-w-500">
                                                                 {{ $order->order_id }}
-                                                            </a>
+                                                            </p>
                                                             <span class="f-light f-14 f-w-500 d-block">
                                                                 {{ $order->created_at->format('d M Y H:i') }}
                                                             </span>
@@ -544,9 +543,9 @@
                                                 </td>
                                                 <td>
                                                     <div class="product-sub">
-                                                        <a class="f-14 f-w-500" href="#">
+                                                        <p class="f-14 f-w-500">
                                                             {{ $order->customer_name ?? 'Customer Umum' }}
-                                                        </a>
+                                                        </p>
                                                         <span class="f-light f-14 f-w-500 d-block">
                                                             {{ $order->meja->nama_meja ?? 'Tanpa Meja' }}
                                                         </span>
@@ -554,9 +553,9 @@
                                                 </td>
                                                 <td>
                                                     <div class="product-sub">
-                                                        <a class="f-14 f-w-500" href="#">
+                                                        <p class="f-14 f-w-500">
                                                             Rp {{ number_format($order->total_amount, 0, ',', '.') }}
-                                                        </a>
+                                                        </p>
                                                         <span class="f-light f-14 f-w-500 d-block">
                                                             {{ $order->items->sum('qty') }} Item
                                                         </span>
@@ -577,14 +576,6 @@
                                                         <span>
                                                             {{ ucfirst($order->status) }}
                                                         </span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="product-sub">
-                                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#modalOrder{{ $order->id }}">
-                                                            <i class="fa fa-eye"></i>
-                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
