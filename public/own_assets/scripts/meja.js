@@ -9,62 +9,119 @@ let table = $('#dataTable').DataTable({
     processing: true,
     ajax: {
         url: '/meja/data',
-        dataSrc: 'data',
+        dataSrc: function (json) {
+
+            // DATA STATIK
+            const staticRow = {
+                id: 'all',
+                nama_meja: 'QRCode Take Away',
+                status: true,
+                qrcode: '/qrcode_meja/qr-code.png',
+                is_static: true
+            };
+
+            json.data.unshift(staticRow);
+
+            return json.data;
+        },
         data: function (d) {
             d.status = 1;
         }
     },
+
     columnDefs: [{
         targets: [0, 2, 3, 4],
         className: 'text-center'
     }],
-    columns: [{
-        data: null,
-        render: function (data, type, row, meta) {
-            return meta.row + 1;
-        }
-    },
-    {
-        data: 'nama_meja'
-    },
-    {
-        data: 'status',
-        render: function (data) {
-            return data ?
-                '<span class="badge bg-success">Active</span>' :
-                '<span class="badge bg-secondary">Inactive</span>';
-        }
-    },
-    {
-        data: 'qrcode',
-        render: function (data) {
-            if (data) {
-                let url = `/storage/${data}`;
 
-                return `
-                    <div class="d-flex justify-content-center">
-                        <div class="qr-wrapper">
-                            <img src="${url}" class="qr-img">
-                            <a href="${url}" download class="qr-download">
-                                <i class="fa fa-download"></i>
-                            </a>
+    columns: [
+
+        {
+            data: null,
+            render: function (data, type, row, meta) {
+                return meta.row + 1;
+            }
+        },
+
+        {
+            data: 'nama_meja'
+        },
+
+        {
+            data: 'status',
+            render: function (data) {
+                return data
+                    ? '<span class="badge bg-success">Active</span>'
+                    : '<span class="badge bg-secondary">Inactive</span>';
+            }
+        },
+
+        {
+            data: 'qrcode',
+            render: function (data) {
+
+                if (data) {
+
+                    let url = `/storage/${data}`;
+
+                    return `
+                        <div class="d-flex justify-content-center">
+                            <div class="qr-wrapper">
+                                <img src="${url}" class="qr-img">
+
+                                <a href="${url}"
+                                   download
+                                   class="qr-download">
+
+                                    <i class="fa fa-download"></i>
+
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                `;
-            } else {
+                    `;
+                }
+
                 return '<span class="text-muted">No QR Code</span>';
             }
+        },
+
+        {
+            data: null,
+            render: function (data, type, row) {
+
+                // JIKA DATA STATIK
+                if (row.is_static) {
+
+                    return `
+                        <a href="/storage/${row.qrcode}"
+                           download
+                           class="btn btn-sm btn-success">
+
+                            <i class="fa fa-download"></i>
+
+                        </a>
+                    `;
+                }
+
+                // DATA NORMAL
+                return `
+                    <button class="btn btn-sm btn-primary edit-btn"
+                        data-id="${row.id}">
+
+                        <i class="fa fa-pencil-square-o"></i>
+
+                    </button>
+
+                    <button class="btn btn-sm btn-danger delete-btn"
+                        data-id="${row.id}">
+
+                        <i class="fa fa-trash"></i>
+
+                    </button>
+                `;
+            }
         }
-    },
-    {
-        data: 'id',
-        render: function (data) {
-            return `
-                            <button class="btn btn-sm btn-primary edit-btn" data-id="${data}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                            <button class="btn btn-sm btn-danger delete-btn" data-id="${data}"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                        `;
-        }
-    }
+
     ]
 });
 
