@@ -78,6 +78,47 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        .img-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img-skeleton {
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            background: linear-gradient(90deg,
+                    #f1f5f9 25%,
+                    #e2e8f0 50%,
+                    #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.2s linear infinite;
+        }
+
+        .menu-img {
+            opacity: 0;
+            transition: opacity .3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .menu-img.loaded {
+            opacity: 1;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
     </style>
 </head>
 
@@ -413,24 +454,41 @@
 
                         html += `
                             <div class="menu-item">
-                                <div class="w-full" style="aspect-ratio: 1/1;">
+
+                                <div class="w-full img-wrapper" style="aspect-ratio:1/1;">
+
+                                    <div class="img-skeleton"></div>
+
                                     <img src="${img}" 
-                                        class="w-full h-full object-contain"
-                                        style="object-position:center bottom;">
+                                        loading="lazy"
+                                        decoding="async"
+                                        class="w-full h-full object-contain menu-img"
+                                        style="object-position:center bottom;"
+                                        onload="this.classList.add('loaded');
+                                                this.previousElementSibling.style.display='none';">
+
                                 </div>
 
                                 <div class="p-4 text-center">
-                                    <h3 class="font-bold text-gray-800">${menu.nama_menu}</h3>
-                                    <p class="font-semibold mt-1" style="color: #074b88;">
+
+                                    <h3 class="font-bold text-gray-800">
+                                        ${menu.nama_menu}
+                                    </h3>
+
+                                    <p class="font-semibold mt-1" style="color:#074b88;">
                                         Rp ${formatRupiah(menu.harga)}
                                     </p>
 
-                                    <button class="btn-add mt-3 w-full py-2 rounded-xl transition" 
-                                        style="background-color: #074b88; color: white;"
+                                    <button class="btn-add mt-3 w-full py-2 rounded-xl transition"
+                                        style="background-color:#074b88;color:white;"
                                         data-menu='${JSON.stringify(menu)}'>
+
                                         Pesan +
+
                                     </button>
+
                                 </div>
+
                             </div>
                         `;
                     });
