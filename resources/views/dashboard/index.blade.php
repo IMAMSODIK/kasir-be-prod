@@ -532,9 +532,6 @@
                                             <tr>
                                                 <td>
                                                     <div class="product-name">
-                                                        <img class="order-table-images img-fluid"
-                                                            src="{{ asset('dashboard_assets/assets/images/dashboard/order-table/1.png') }}"
-                                                            alt="order">
                                                         <div class="product-sub">
                                                             <a class="f-14 f-w-500" href="#">
                                                                 {{ $order->order_id }}
