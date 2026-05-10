@@ -83,7 +83,7 @@
                 <div class="col-lg-8 col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Revenue Chart</h5>
+                            <h5>Pendapatan Chart</h5>
                         </div>
                         <div class="card-body">
                             <canvas id="revenueChart"></canvas>
@@ -99,7 +99,7 @@
                             </div>
 
                             <span class="badge bg-success mb-3">
-                                Revenue Hari Ini
+                                Pendapatan Hari Ini
                             </span>
 
                             <h2 class="text-white f-w-700 mb-1">
@@ -144,6 +144,364 @@
 
                             </div>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row size-column">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Revenue</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card o-hidden small-widget">
+                                    <div class="card-body total-project border-b-primary border-2"><span
+                                            class="f-light f-w-500 f-14">Total</span>
+                                        <div class="project-details">
+                                            <div class="project-counter">
+                                                <h2 class="f-w-600" style="font-size:18px">Rp
+                                                    {{ number_format($revenue['total'], 0, ',', '.') }}
+                                                </h2>
+                                                <span class="f-12 f-w-400">(Total)</span>
+                                            </div>
+                                            <div class="product-sub bg-primary-light">
+                                                <svg class="invoice-icon">
+                                                    <use
+                                                        href="{{ asset('dashboard_assets/assets/svg/icon-sprite.svg#color-swatch') }}">
+                                                    </use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <ul class="bubbles">
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card o-hidden small-widget">
+                                    <div class="card-body total-Progress border-b-warning border-2"> <span
+                                            class="f-light f-w-500 f-14">Tahun Ini</span>
+                                        <div class="project-details">
+                                            <div class="project-counter">
+                                                <h2 class="f-w-600" style="font-size:18px">Rp
+                                                    {{ number_format($revenue['year'], 0, ',', '.') }}
+                                                </h2>
+                                                <span class="f-12 f-w-400">(Tahun Ini)</span>
+                                            </div>
+                                            <div class="product-sub bg-warning-light">
+                                                <svg class="invoice-icon">
+                                                    <use
+                                                        href="{{ asset('dashboard_assets/assets/svg/icon-sprite.svg#tick-circle') }}">
+                                                    </use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <ul class="bubbles">
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card o-hidden small-widget">
+                                    <div class="card-body total-Complete border-b-secondary border-2"><span
+                                            class="f-light f-w-500 f-14">Bulan Ini</span>
+                                        <div class="project-details">
+                                            <div class="project-counter">
+                                                <h2 class="f-w-600" style="font-size:18px">Rp
+                                                    {{ number_format($revenue['month'], 0, ',', '.') }}
+                                                </h2>
+                                                <span class="f-12 f-w-400">(Bulan Ini)</span>
+                                            </div>
+                                            <div class="product-sub bg-secondary-light">
+                                                <svg class="invoice-icon">
+                                                    <use
+                                                        href="{{ asset('dashboard_assets/assets/svg/icon-sprite.svg#add-square') }}">
+                                                    </use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <ul class="bubbles">
+                                            <li class="bubble"> </li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"> </li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"> </li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"> </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card o-hidden small-widget">
+                                    <div class="card-body total-upcoming"><span class="f-light f-w-500 f-14">Hari
+                                            Ini</span>
+                                        <div class="project-details">
+                                            <div class="project-counter">
+                                                <h2 class="f-w-600" style="font-size:18px">Rp
+                                                    {{ number_format($revenue['today'], 0, ',', '.') }}
+                                                </h2><span class="f-12 f-w-400">(Hari Ini)</span>
+                                            </div>
+                                            <div class="product-sub bg-light-light">
+                                                <svg class="invoice-icon">
+                                                    <use
+                                                        href="{{ asset('dashboard_assets/assets/svg/icon-sprite.svg#edit-2') }}">
+                                                    </use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <ul class="bubbles">
+                                            <li class="bubble"> </li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row size-column">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Order</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card o-hidden small-widget">
+                                    <div class="card-body total-project border-b-primary border-2"><span
+                                            class="f-light f-w-500 f-14">Total</span>
+                                        <div class="project-details">
+                                            <div class="project-counter">
+                                                <h2 class="f-w-600">{{ $orders['total'] }}</h2>
+                                                <p class="f-12 f-w-400">(Order)</p>
+                                            </div>
+                                            <div class="product-sub bg-primary-light">
+                                                <svg class="invoice-icon">
+                                                    <use
+                                                        href="{{ asset('dashboard_assets/assets/svg/icon-sprite.svg#color-swatch') }}">
+                                                    </use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <ul class="bubbles">
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card o-hidden small-widget">
+                                    <div class="card-body total-Progress border-b-warning border-2"> <span
+                                            class="f-light f-w-500 f-14">Tahun Ini</span>
+                                        <div class="project-details">
+                                            <div class="project-counter">
+                                                <h2 class="f-w-600">{{ $orders['year'] }}
+                                                </h2>
+                                                <p class="f-12 f-w-400">(Order)</p>
+                                            </div>
+                                            <div class="product-sub bg-warning-light">
+                                                <svg class="invoice-icon">
+                                                    <use
+                                                        href="{{ asset('dashboard_assets/assets/svg/icon-sprite.svg#tick-circle') }}">
+                                                    </use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <ul class="bubbles">
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card o-hidden small-widget">
+                                    <div class="card-body total-Complete border-b-secondary border-2"><span
+                                            class="f-light f-w-500 f-14">Bulan Ini</span>
+                                        <div class="project-details">
+                                            <div class="project-counter">
+                                                <h2 class="f-w-600">{{ $orders['month'] }}
+                                                </h2>
+                                                <p class="f-12 f-w-400">(Order)</p>
+                                            </div>
+                                            <div class="product-sub bg-secondary-light">
+                                                <svg class="invoice-icon">
+                                                    <use
+                                                        href="{{ asset('dashboard_assets/assets/svg/icon-sprite.svg#add-square') }}">
+                                                    </use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <ul class="bubbles">
+                                            <li class="bubble"> </li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"> </li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"> </li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"> </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card o-hidden small-widget">
+                                    <div class="card-body total-upcoming"><span class="f-light f-w-500 f-14">Hari
+                                            Ini</span>
+                                        <div class="project-details">
+                                            <div class="project-counter">
+                                                <h2 class="f-w-600">{{ $orders['today'] }}
+                                                </h2>
+                                                <p class="f-12 f-w-400">(Order)</p>
+                                            </div>
+                                            <div class="product-sub bg-light-light">
+                                                <svg class="invoice-icon">
+                                                    <use
+                                                        href="{{ asset('dashboard_assets/assets/svg/icon-sprite.svg#edit-2') }}">
+                                                    </use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <ul class="bubbles">
+                                            <li class="bubble"> </li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                            <li class="bubble"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row size-column">
+                <div class="col-6">
+                    <div class="card height-equal">
+                        <div class="card-header card-no-border total-revenue">
+                            <h4>Best Seller Menu</h4>
+                            <a href="#">View All</a>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="top-product-card">
+                                <ul>
+                                    @forelse($bestSellerMenus as $menu)
+                                        <li class="d-flex top-product gap-2">
+                                            <div>
+                                                <img class="img-fluid product-img"
+                                                    src="{{ optional($menu->menu->fotoMenus->first())->foto_path
+                                                        ? asset($menu->menu->fotoMenus->first()->foto_path)
+                                                        : asset('no-image.png') }}"
+                                                    alt="{{ $menu->nama_menu }}">
+                                            </div>
+                                            <div class="w-100 d-flex justify-content-between align-items-center">
+                                                <div class="product-details">
+                                                    <div>
+                                                        <span class="badge rounded-pill badge-light text-dark">
+                                                            TOP MENU
+                                                        </span>
+                                                    </div>
+                                                    <a class="f-10 f-w-500 line-clamp" href="#">
+                                                        {{ $menu->nama_menu }}
+                                                    </a>
+                                                    <span class="f-10 f-w-500 txt-primary">
+                                                        Rp {{ number_format($menu->total_income, 0, ',', '.') }}
+                                                    </span>
+                                                </div>
+                                                <div class="product-items">
+                                                    <div class="common-space gap-1">
+                                                        <span class="f-10 f-w-500 f-light">
+                                                            QTY :
+                                                        </span>
+                                                        <span class="f-10 f-w-500">
+                                                            {{ $menu->total_qty }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="common-space gap-1">
+                                                        <span class="f-10 f-w-500 f-light">
+                                                            Revenue :
+                                                        </span>
+                                                        <span class="f-10 f-w-500">
+                                                            Rp {{ number_format($menu->total_income, 0, ',', '.') }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="common-space gap-1">
+                                                        <span class="f-10 f-w-500 f-light">
+                                                            Avg :
+                                                        </span>
+                                                        <span class="f-10 f-w-500">
+                                                            Rp
+                                                            {{ number_format($menu->total_income / max($menu->total_qty, 1), 0, ',', '.') }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @empty
+                                        <li>
+                                            <div class="alert alert-warning mb-0">
+                                                Belum ada data penjualan menu
+                                            </div>
+                                        </li>
+                                    @endforelse
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -106,12 +106,15 @@ class DashboardController extends Controller
             | BEST SELLER MENU
             |--------------------------------------------------------------------------
             */
-            $bestSellerMenus = OrderItem::select(
-                'menu_id',
-                'nama_menu',
-                DB::raw('SUM(qty) as total_qty'),
-                DB::raw('SUM(harga * qty) as total_income')
-            )
+            $bestSellerMenus = OrderItem::with([
+                'menu.fotoMenus'
+            ])
+                ->select(
+                    'menu_id',
+                    'nama_menu',
+                    DB::raw('SUM(qty) as total_qty'),
+                    DB::raw('SUM(harga * qty) as total_income')
+                )
                 ->groupBy('menu_id', 'nama_menu')
                 ->orderByDesc('total_qty')
                 ->take(5)
@@ -144,6 +147,8 @@ class DashboardController extends Controller
                 ];
             }
 
+            dd($bestSellerMenus);
+
 
             $data = [
                 'pageTitle' => 'Dashboard',
@@ -169,7 +174,7 @@ class DashboardController extends Controller
                     'total' => $totalTables,
                     'active' => $activeTables,
                 ],
-                'best_seller_menus' => $bestSellerMenus,
+                'bestSellerMenus' => $bestSellerMenus,
                 'revenue_chart' => $chartData,
             ];
 
