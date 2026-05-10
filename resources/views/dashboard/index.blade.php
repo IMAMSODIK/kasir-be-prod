@@ -432,7 +432,7 @@
             </div>
 
             <div class="row size-column">
-                <div class="col-6">
+                <div class="col-12 col-lg-6">
                     <div class="card height-equal">
                         <div class="card-header card-no-border total-revenue">
                             <h4>Best Seller Menu</h4>
