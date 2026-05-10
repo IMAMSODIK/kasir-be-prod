@@ -505,7 +505,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xxl-6 col-md-12 box-col-12">
+                <div class="col-12 col-lg-6">
                     <div class="card height-equal">
                         <div class="card-header total-revenue card-no-border">
                             <h4>Latest Orders</h4>
