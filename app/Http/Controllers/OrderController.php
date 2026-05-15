@@ -163,8 +163,6 @@ class OrderController extends Controller
         return response()->json($orders);
     }
 
-
-
     /*
     |--------------------------------------------------------------------------
     | ORDER SELESAI
@@ -202,8 +200,6 @@ class OrderController extends Controller
         return response()->json($orders);
     }
 
-
-
     /*
     |--------------------------------------------------------------------------
     | SELESAIKAN ORDER
@@ -221,8 +217,6 @@ class OrderController extends Controller
             'message' => 'Order berhasil diselesaikan'
         ]);
     }
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -242,8 +236,6 @@ class OrderController extends Controller
         ]);
     }
 
-
-
     /*
     |--------------------------------------------------------------------------
     | HAPUS ORDER
@@ -258,6 +250,38 @@ class OrderController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Order berhasil dihapus'
+        ]);
+    }
+
+    public function indexApi(Request $request)
+    {
+        $status = $request->status;
+
+        $query = Order::with([
+            'items',
+            'meja'
+        ])->latest();
+
+        if ($status === 'active') {
+            $query->whereIn('status', [
+                'pending',
+                'paid',
+                'challenge'
+            ]);
+        }
+
+        if ($status === 'completed') {
+            $query->whereIn('status', [
+                'settlement',
+                'completed'
+            ]);
+        }
+
+        $orders = $query->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $orders
         ]);
     }
 }

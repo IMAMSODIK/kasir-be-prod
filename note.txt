@@ -2,21 +2,10 @@ TODO
 - daftar order
 - riwayat order
 - menu terlaris dan kurang laris
-
-
-- statistik penjualan
-    - total penjualan (revenue)
-    - jumlah order
-    - total item terjual
-    - filter (hari, bulan, tahun)
-    - menu terlaris
-    - menu kurang laku
-    - meja paling sering dipakai
     
 
 
 - laporan order
-
 - mobile kasir dan waiters
 
 

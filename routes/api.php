@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ApiMenuController;
 use App\Http\Controllers\ApiOrderController;
 use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
@@ -21,4 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/checkout', [ApiOrderController::class, 'checkout']);
     Route::get('/order/status/{orderId}', [ApiOrderController::class, 'checkStatus']);
+
+    Route::get('/orders', [OrderController::class, 'indexApi']);
 });
