@@ -262,7 +262,7 @@ class OrderController extends Controller
         if (auth()->user()->role === 'kitchen') {
 
             if ($status === 'active') {
-                $query->where('status', 'paid');
+                $query->whereIn('status', ['paid', 'kitchen_process']);
             }
 
             if ($status === 'completed') {
