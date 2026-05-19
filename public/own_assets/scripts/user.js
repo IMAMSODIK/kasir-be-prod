@@ -157,7 +157,10 @@ $('#formCreate').submit(function (e) {
     $('.text-danger').text('');
 
     let form = document.getElementById('formCreate');
+    let token = $("meta[name='csrf-token']").attr("content");
     let formData = new FormData(form);
+    
+    formData.append('_token', token);
 
     $.ajax({
         url: '/users/store',

@@ -1,13 +1,2 @@
 TODO
-- daftar order
-- riwayat order
-- menu terlaris dan kurang laris
-    
-
-
-- laporan order
-- mobile kasir dan waiters
-
-
-
-produk selengkapnya masih paka all store (tapi suda di flagging)
+- bayar tunai masih belum masuk database

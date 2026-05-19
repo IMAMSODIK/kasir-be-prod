@@ -140,18 +140,16 @@ class OrderController extends Controller
         $keyword = $request->keyword;
 
         $orders = Order::with([
-                'items',
-                'meja'
-            ])
+            'items',
+            'meja'
+        ])
             ->when($keyword, function ($q) use ($keyword) {
 
                 $q->where(function ($query) use ($keyword) {
 
                     $query->where('order_id', 'like', "%{$keyword}%")
                         ->orWhere('customer_name', 'like', "%{$keyword}%");
-
                 });
-
             })
             ->whereIn('status', [
                 'pending',
@@ -175,18 +173,16 @@ class OrderController extends Controller
         $limit = $request->limit ?? 10;
 
         $orders = Order::with([
-                'items',
-                'meja'
-            ])
+            'items',
+            'meja'
+        ])
             ->when($keyword, function ($q) use ($keyword) {
 
                 $q->where(function ($query) use ($keyword) {
 
                     $query->where('order_id', 'like', "%{$keyword}%")
                         ->orWhere('customer_name', 'like', "%{$keyword}%");
-
                 });
-
             })
             ->whereIn('status', [
                 'paid',
@@ -262,19 +258,30 @@ class OrderController extends Controller
             'meja'
         ])->latest();
 
-        if ($status === 'active') {
-            $query->whereIn('status', [
-                'pending',
-                'paid',
-                'challenge'
-            ]);
-        }
+        // ROLE KITCHEN
+        if (auth()->user()->role === 'kitchen') {
 
-        if ($status === 'completed') {
-            $query->whereIn('status', [
-                'settlement',
-                'completed'
-            ]);
+            if ($status === 'active') {
+                $query->where('status', 'paid');
+            }
+
+            if ($status === 'completed') {
+                $query->where('status', 'completed');
+            }
+        } else {
+
+            // ROLE LAIN
+            if ($status === 'active') {
+                $query->whereIn('status', [
+                    'pending',
+                    'paid',
+                    'challenge'
+                ]);
+            }
+
+            if ($status === 'completed') {
+                $query->where('status', 'completed');
+            }
         }
 
         $orders = $query->get();
