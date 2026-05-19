@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/checkout', [ApiOrderController::class, 'checkout']);
     Route::get('/order/status/{orderId}', [ApiOrderController::class, 'checkStatus']);
+    Route::post('/orders/{id}/update-status', [ApiOrderController::class, 'updateStatus']);
 
     Route::get('/orders', [OrderController::class, 'indexApi']);
 });

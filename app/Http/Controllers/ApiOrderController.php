@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -76,7 +77,7 @@ class ApiOrderController extends Controller
 
             // Get environment (sandbox or production)
             $isProduction = config('midtrans.is_production', false);
-            $baseUrl = $isProduction 
+            $baseUrl = $isProduction
                 ? 'https://app.midtrans.com'
                 : 'https://app.sandbox.midtrans.com';
 
@@ -106,7 +107,7 @@ class ApiOrderController extends Controller
             ];
 
             $snapToken = Snap::getSnapToken($params);
-            
+
             // Generate redirect URL (lebih stabil untuk mobile)
             $redirectUrl = "{$baseUrl}/snap/v2/vtweb/{$snapToken}";
 
@@ -154,5 +155,22 @@ class ApiOrderController extends Controller
                 'message' => 'Gagal mengecek status: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        $request->validate([
+            'status' => 'required'
+        ]);
+
+        $order->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }
