@@ -294,7 +294,8 @@ class MenuController extends Controller
             return response()->json([
                 'success' => true,
                 'is_ready' => $menu->is_ready,
-                'message' => 'Status berhasil diubah'
+                'message' => 'Status berhasil diubah',
+                'data' => $menu
             ]);
         } catch (\Exception $e) {
             return response()->json([
