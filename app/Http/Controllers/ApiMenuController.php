@@ -57,7 +57,7 @@ class ApiMenuController extends Controller
                     ? asset('storage/' . $firstPhoto->foto_path)
                     : null,
                 'description' => $menu->deskripsi,
-                'is_ready' => $menu->is_ready,
+                'is_ready' => (bool) $menu->is_ready,
             ];
         });
 
