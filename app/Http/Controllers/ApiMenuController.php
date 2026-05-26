@@ -41,7 +41,7 @@ class ApiMenuController extends Controller
         }
 
         $menus = $menus
-            ->orderBy('created_at', 'desc')
+            ->orderBy('is_ready', 'desc')
             ->get();
 
         $products = $menus->map(function ($menu) {
