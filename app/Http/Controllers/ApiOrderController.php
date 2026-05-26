@@ -29,11 +29,15 @@ class ApiOrderController extends Controller
             'items.*.id' => 'required|string',
             'items.*.qty' => 'required|integer|min:1',
             'items.*.note' => 'nullable|string|max:255',
+            'payment_type' => 'nullable|string', // cash | qris
         ]);
 
         DB::beginTransaction();
 
         try {
+
+            $paymentType = $request->payment_type ?? 'qris';
+
             $grossAmount = 0;
             $itemDetails = [];
             $today = now()->format('dmy');
@@ -49,22 +53,28 @@ class ApiOrderController extends Controller
             } else {
                 $newNumber = '001';
             }
+
             $orderId = 'TRX-' . $today . '-' . $newNumber;
 
+            // =========================
+            // CREATE ORDER
+            // =========================
             $order = Order::create([
                 'order_id' => $orderId,
                 'total_amount' => 0,
-                'status' => 'pending',
+                'status' => $paymentType === 'cash' ? 'paid' : 'pending',
+                'payment_type' => $paymentType,
                 'meja_id' => null,
             ]);
 
-            // Create order items
             foreach ($request->items as $item) {
+
                 $menu = Menu::findOrFail($item['id']);
 
                 $price = (int) $menu->harga;
                 $qty = (int) $item['qty'];
                 $subtotal = $price * $qty;
+
                 $grossAmount += $subtotal;
 
                 OrderItem::create([
@@ -84,16 +94,34 @@ class ApiOrderController extends Controller
                 ];
             }
 
-            // Update total amount
-            $order->update(['total_amount' => $grossAmount]);
+            $order->update([
+                'total_amount' => $grossAmount,
+            ]);
 
-            // Get environment (sandbox or production)
+            // =========================
+            // CASH FLOW (NO MIDTRANS)
+            // =========================
+            if ($paymentType === 'cash') {
+
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order tunai berhasil dibuat',
+                    'order_id' => $orderId,
+                    'order' => $order,
+                ]);
+            }
+
+            // =========================
+            // MIDTRANS FLOW (QRIS / ONLINE)
+            // =========================
             $isProduction = config('midtrans.is_production', false);
+
             $baseUrl = $isProduction
                 ? 'https://app.midtrans.com'
                 : 'https://app.sandbox.midtrans.com';
 
-            // Midtrans parameters
             $params = [
                 'transaction_details' => [
                     'order_id' => $orderId,
@@ -110,9 +138,8 @@ class ApiOrderController extends Controller
                     'duration' => 60,
                 ],
                 'enabled_payments' => [
-                    'credit_card',
-                    'bank_transfer',
                     'qris',
+                    'bank_transfer',
                     'gopay',
                     'shopeepay',
                 ],
@@ -120,19 +147,19 @@ class ApiOrderController extends Controller
 
             $snapToken = Snap::getSnapToken($params);
 
-            // Generate redirect URL (lebih stabil untuk mobile)
             $redirectUrl = "{$baseUrl}/snap/v2/vtweb/{$snapToken}";
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'snap_token' => $snapToken,
-                'redirect_url' => $redirectUrl, // Kirim redirect URL
                 'order_id' => $orderId,
+                'snap_token' => $snapToken,
+                'redirect_url' => $redirectUrl,
                 'message' => 'Checkout berhasil',
             ]);
         } catch (\Exception $e) {
+
             DB::rollBack();
 
             return response()->json([
