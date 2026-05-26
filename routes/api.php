@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/menus', [ApiMenuController::class, 'index']);
     Route::get('/menus/search', [ApiMenuController::class, 'searchMenus']);
+    Route::put('/menus/{id}/toggle-ready', [MenuController::class, 'toggleReady']);
 
     Route::post('/checkout', [ApiOrderController::class, 'checkout']);
     Route::get('/order/status/{orderId}', [ApiOrderController::class, 'checkStatus']);

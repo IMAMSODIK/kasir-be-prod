@@ -71,7 +71,7 @@ class MenuController extends Controller
 
             if ($request->filled('kategori') && $request->kategori != '0') {
                 $menu = $query->where('kategori_menu_id', $request->kategori)->get();
-            }else{
+            } else {
                 $menu = $query->get();
             }
 
@@ -283,18 +283,21 @@ class MenuController extends Controller
         }
     }
 
-    public function toggleReady(Request $request)
+    public function toggleReady(Request $request, $id)
     {
         try {
-            $menu = Menu::findOrFail($request->id);
+            $request->validate([
+                'is_ready' => 'required|boolean'
+            ]);
 
-            $menu->is_ready = !$menu->is_ready;
-            $menu->save();
+            $menu = Menu::findOrFail($id);
+
+            $menu->update([
+                'is_ready' => $request->is_ready
+            ]);
 
             return response()->json([
-                'success' => true,
-                'is_ready' => $menu->is_ready,
-                'message' => 'Status berhasil diubah',
+                'message' => 'Status menu berhasil diubah',
                 'data' => $menu
             ]);
         } catch (\Exception $e) {
