@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/checkout', [ApiOrderController::class, 'checkout']);
     Route::get('/order/status/{orderId}', [ApiOrderController::class, 'checkStatus']);
     Route::post('/orders/{id}/update-status', [ApiOrderController::class, 'updateStatus']);
-    Route::post('/menus/{id}/toggle-ready', [MenuController::class, 'toggleReady']
+    Route::post('/menus/{id}/toggle-ready', [MenuController::class, 'apiToggleReady']
 );
 
     Route::get('/orders', [OrderController::class, 'indexApi']);

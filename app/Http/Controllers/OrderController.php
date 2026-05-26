@@ -34,10 +34,22 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-
             $grossAmount = 0;
             $itemDetails = [];
-            $orderId = 'ORDER-' . Str::uuid();
+            $today = now()->format('dmy');
+
+            $lastOrder = Order::whereDate('created_at', today())
+                ->where('order_id', 'like', 'TRX-' . $today . '-%')
+                ->latest('id')
+                ->first();
+
+            if ($lastOrder) {
+                $lastNumber = (int) substr($lastOrder->order_id, -3);
+                $newNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+            } else {
+                $newNumber = '001';
+            }
+            $orderId = 'TRX-' . $today . '-' . $newNumber;
 
             $order = Order::create([
                 'order_id' => $orderId,
