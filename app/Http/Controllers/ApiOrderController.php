@@ -29,7 +29,7 @@ class ApiOrderController extends Controller
             'items.*.id' => 'required|string',
             'items.*.qty' => 'required|integer|min:1',
             'items.*.note' => 'nullable|string|max:255',
-            'payment_type' => 'nullable|string', // cash | qris
+            'payment_type' => 'nullable|string', // tunai | qris
         ]);
 
         DB::beginTransaction();
@@ -62,7 +62,7 @@ class ApiOrderController extends Controller
             $order = Order::create([
                 'order_id' => $orderId,
                 'total_amount' => 0,
-                'status' => $paymentType === 'cash' ? 'paid' : 'pending',
+                'status' => $paymentType === 'tunai' ? 'paid' : 'pending',
                 'payment_type' => $paymentType,
                 'meja_id' => null,
             ]);
@@ -99,9 +99,9 @@ class ApiOrderController extends Controller
             ]);
 
             // =========================
-            // CASH FLOW (NO MIDTRANS)
+            // tunai FLOW (NO MIDTRANS)
             // =========================
-            if ($paymentType === 'cash') {
+            if ($paymentType === 'tunai') {
 
                 DB::commit();
 
