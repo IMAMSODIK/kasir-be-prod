@@ -19,7 +19,6 @@ class MidtransController extends Controller
 
     public function callback(Request $request)
     {
-        // 🔐 1. VALIDASI SIGNATURE (WAJIB)
         $serverKey = config('midtrans.server_key');
 
         $signatureKey = hash(
