@@ -20,8 +20,7 @@ class ApiMenuController extends Controller
             'kategoriMenu',
             'fotoMenus'
         ])
-            ->where('status', true)
-            ->where('is_ready', true);
+            ->where('status', true);
 
         // Filter kategori
         if ($r->category && $r->category != 'Semua') {
@@ -58,6 +57,7 @@ class ApiMenuController extends Controller
                     ? asset('storage/' . $firstPhoto->foto_path)
                     : null,
                 'description' => $menu->deskripsi,
+                'is_ready' => $menu->is_ready,
             ];
         });
 
