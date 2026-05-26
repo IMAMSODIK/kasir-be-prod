@@ -297,6 +297,7 @@ class MenuController extends Controller
             ]);
 
             return response()->json([
+                'success' => true,
                 'message' => 'Status menu berhasil diubah',
                 'data' => $menu
             ]);
