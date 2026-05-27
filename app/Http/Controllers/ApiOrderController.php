@@ -126,7 +126,7 @@ class ApiOrderController extends Controller
             // =========================
 
             $params = [
-                'payment_type' => 'qris',
+                'payment_type' => 'gopay',
 
                 'transaction_details' => [
                     'order_id' => $orderId,
@@ -138,10 +138,6 @@ class ApiOrderController extends Controller
                 'customer_details' => [
                     'first_name' => $request->user()?->name ?? 'Customer',
                     'email' => $request->user()?->email ?? 'customer@example.com',
-                ],
-
-                'qris' => [
-                    'acquirer' => 'gopay'
                 ],
 
                 'custom_expiry' => [
