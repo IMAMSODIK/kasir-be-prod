@@ -8,9 +8,10 @@ use App\Models\OrderItem;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+
 use Midtrans\Config;
-use Midtrans\Snap;
+use Midtrans\CoreApi;
+use Midtrans\Transaction;
 
 class ApiOrderController extends Controller
 {
@@ -29,7 +30,7 @@ class ApiOrderController extends Controller
             'items.*.id' => 'required|string',
             'items.*.qty' => 'required|integer|min:1',
             'items.*.note' => 'nullable|string|max:255',
-            'payment_type' => 'nullable|string', // tunai | qris
+            'payment_type' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -40,6 +41,7 @@ class ApiOrderController extends Controller
 
             $grossAmount = 0;
             $itemDetails = [];
+
             $today = now()->format('dmy');
 
             $lastOrder = Order::whereDate('created_at', today())
@@ -59,10 +61,13 @@ class ApiOrderController extends Controller
             // =========================
             // CREATE ORDER
             // =========================
+
             $order = Order::create([
                 'order_id' => $orderId,
                 'total_amount' => 0,
-                'status' => $paymentType === 'tunai' ? 'paid' : 'pending',
+                'status' => $paymentType === 'tunai'
+                    ? 'paid'
+                    : 'pending',
                 'payment_type' => $paymentType,
                 'meja_id' => null,
             ]);
@@ -73,6 +78,7 @@ class ApiOrderController extends Controller
 
                 $price = (int) $menu->harga;
                 $qty = (int) $item['qty'];
+
                 $subtotal = $price * $qty;
 
                 $grossAmount += $subtotal;
@@ -87,7 +93,7 @@ class ApiOrderController extends Controller
                 ]);
 
                 $itemDetails[] = [
-                    'id' => $menu->id,
+                    'id' => (string) $menu->id,
                     'price' => $price,
                     'quantity' => $qty,
                     'name' => $menu->nama_menu,
@@ -99,8 +105,9 @@ class ApiOrderController extends Controller
             ]);
 
             // =========================
-            // tunai FLOW (NO MIDTRANS)
+            // CASH FLOW
             // =========================
+
             if ($paymentType === 'tunai') {
 
                 DB::commit();
@@ -108,56 +115,76 @@ class ApiOrderController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => 'Order tunai berhasil dibuat',
+                    'payment_type' => 'tunai',
                     'order_id' => $orderId,
                     'order' => $order,
                 ]);
             }
 
             // =========================
-            // MIDTRANS FLOW (QRIS / ONLINE)
+            // DIRECT QRIS FLOW
             // =========================
-            $isProduction = config('midtrans.is_production', false);
-
-            $baseUrl = $isProduction
-                ? 'https://app.midtrans.com'
-                : 'https://app.sandbox.midtrans.com';
 
             $params = [
+                'payment_type' => 'qris',
+
                 'transaction_details' => [
                     'order_id' => $orderId,
                     'gross_amount' => $grossAmount,
                 ],
+
                 'item_details' => $itemDetails,
+
                 'customer_details' => [
                     'first_name' => $request->user()?->name ?? 'Customer',
                     'email' => $request->user()?->email ?? 'customer@example.com',
                 ],
-                'expiry' => [
-                    'start_time' => date('Y-m-d H:i:s O'),
-                    'unit' => 'minutes',
-                    'duration' => 60,
+
+                'qris' => [
+                    'acquirer' => 'gopay'
                 ],
-                'enabled_payments' => [
-                    'qris',
-                    'bank_transfer',
-                    'gopay',
-                    'shopeepay',
+
+                'custom_expiry' => [
+                    'expiry_duration' => 60,
+                    'unit' => 'minute',
                 ],
             ];
 
-            $snapToken = Snap::getSnapToken($params);
+            $charge = CoreApi::charge($params);
 
-            $redirectUrl = "{$baseUrl}/snap/v2/vtweb/{$snapToken}";
+            $qrisUrl = null;
+
+            if (isset($charge->actions)) {
+
+                foreach ($charge->actions as $action) {
+
+                    if ($action->name === 'generate-qr-code') {
+                        $qrisUrl = $action->url;
+                    }
+                }
+            }
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
+                'message' => 'QRIS berhasil dibuat',
+
+                'payment_type' => 'qris',
+
                 'order_id' => $orderId,
-                'snap_token' => $snapToken,
-                'redirect_url' => $redirectUrl,
-                'message' => 'Checkout berhasil',
+
+                'transaction_status' => $charge->transaction_status ?? 'pending',
+
+                'qris_url' => $qrisUrl,
+
+                'qr_string' => $charge->qr_string ?? null,
+
+                'expiry_time' => $charge->expiry_time ?? null,
+
+                'gross_amount' => $grossAmount,
             ]);
+
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -172,6 +199,7 @@ class ApiOrderController extends Controller
     public function checkStatus($orderId)
     {
         try {
+
             $order = Order::where('order_id', $orderId)->first();
 
             if (!$order) {
@@ -182,13 +210,56 @@ class ApiOrderController extends Controller
                 ], 404);
             }
 
+            // =========================
+            // CHECK MIDTRANS STATUS
+            // =========================
+
+            if ($order->payment_type === 'qris') {
+
+                $status = Transaction::status($orderId);
+
+                $transactionStatus = $status->transaction_status ?? 'pending';
+
+                // settlement = paid
+                if (
+                    $transactionStatus === 'settlement' ||
+                    $transactionStatus === 'capture'
+                ) {
+
+                    $order->update([
+                        'status' => 'paid'
+                    ]);
+                }
+
+                // expired
+                if ($transactionStatus === 'expire') {
+
+                    $order->update([
+                        'status' => 'expired'
+                    ]);
+                }
+
+                // cancel
+                if ($transactionStatus === 'cancel') {
+
+                    $order->update([
+                        'status' => 'cancelled'
+                    ]);
+                }
+
+                $order->refresh();
+            }
+
             return response()->json([
                 'success' => true,
                 'status' => $order->status,
                 'order_id' => $order->order_id,
+                'payment_type' => $order->payment_type,
                 'total_amount' => $order->total_amount,
             ]);
+
         } catch (\Exception $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal mengecek status: ' . $e->getMessage(),
