@@ -270,43 +270,59 @@ class OrderController extends Controller
     public function indexApi(Request $request)
     {
         $status = $request->status;
+        $search = $request->search;
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
 
         $query = Order::with([
             'items',
             'meja'
         ])->latest();
 
-        // ROLE KITCHEN
+        // 1. FILTER BERDASARKAN ROLE & STATUS
         if (auth()->user()->role === 'kitchen') {
-
             if ($status === 'active') {
                 $query->whereIn('status', ['paid', 'kitchen_process']);
             }
-
             if ($status === 'completed') {
                 $query->where('status', 'completed');
             }
         } else {
-
-            // ROLE LAIN
             if ($status === 'active') {
-                $query->whereIn('status', [
-                    'pending',
-                    'paid',
-                    'challenge'
-                ]);
+                $query->whereIn('status', ['pending', 'paid', 'challenge']);
             }
-
             if ($status === 'completed') {
                 $query->where('status', 'completed');
             }
         }
 
-        $orders = $query->get();
+        // 2. FILTER PENCARIAN (Order ID atau Nama Customer)
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('order_id', 'LIKE', '%' . $search . '%')
+                    ->orWhere('customer_name', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        // 3. FILTER TANGGAL (Khusus untuk Tab Completed)
+        if ($status === 'completed' && !empty($startDate) && !empty($endDate)) {
+            $query->whereBetween('created_at', [
+                $startDate . ' 00:00:00',
+                $endDate . ' 23:59:59'
+            ]);
+        }
+
+        // Gunakan paginate, default 10 atau 15 data per halaman
+        $perPage = $request->get('per_page', 10);
+        $orders = $query->paginate($perPage);
 
         return response()->json([
             'success' => true,
-            'data' => $orders
+            // Di Laravel, data paginasi dibungkus dalam properti 'data' otomatis
+            'data' => $orders->items(),
+            'current_page' => $orders->currentPage(),
+            'last_page' => $orders->lastPage(),
+            'has_more' => $orders->hasMorePages()
         ]);
     }
 }
