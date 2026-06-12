@@ -270,17 +270,29 @@ class OrderController extends Controller
     public function indexApi(Request $request)
     {
         $status = $request->status;
+        $search = $request->search;
+        $selectedStatus = $request->selected_status;
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
 
         $query = Order::with([
             'items',
             'meja'
         ])->latest();
 
-        // ROLE KITCHEN
+        /*
+    |--------------------------------------------------------------------------
+    | ROLE FILTER
+    |--------------------------------------------------------------------------
+    */
+
         if (auth()->user()->role === 'kitchen') {
 
             if ($status === 'active') {
-                $query->whereIn('status', ['paid', 'kitchen_process']);
+                $query->whereIn('status', [
+                    'paid',
+                    'kitchen_process'
+                ]);
             }
 
             if ($status === 'completed') {
@@ -288,7 +300,6 @@ class OrderController extends Controller
             }
         } else {
 
-            // ROLE LAIN
             if ($status === 'active') {
                 $query->whereIn('status', [
                     'pending',
@@ -302,11 +313,89 @@ class OrderController extends Controller
             }
         }
 
-        $orders = $query->get();
+        /*
+    |--------------------------------------------------------------------------
+    | SEARCH
+    |--------------------------------------------------------------------------
+    */
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+
+                $q->where(
+                    'order_id',
+                    'like',
+                    "%{$search}%"
+                );
+
+                $q->orWhere(
+                    'customer_name',
+                    'like',
+                    "%{$search}%"
+                );
+            });
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | STATUS FILTER
+    |--------------------------------------------------------------------------
+    */
+
+        if (
+            !empty($selectedStatus) &&
+            $selectedStatus !== 'Semua'
+        ) {
+            $query->where(
+                'status',
+                strtolower($selectedStatus)
+            );
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | DATE FILTER
+    |--------------------------------------------------------------------------
+    */
+
+        if (
+            !empty($startDate) &&
+            !empty($endDate)
+        ) {
+            $query->whereBetween(
+                'created_at',
+                [
+                    $startDate . ' 00:00:00',
+                    $endDate . ' 23:59:59',
+                ]
+            );
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | PAGINATION
+    |--------------------------------------------------------------------------
+    */
+
+        $perPage = $request->get(
+            'per_page',
+            20
+        );
+
+        $orders = $query->paginate($perPage);
 
         return response()->json([
             'success' => true,
-            'data' => $orders
+
+            'data' => $orders->items(),
+
+            'current_page' => $orders->currentPage(),
+
+            'last_page' => $orders->lastPage(),
+
+            'total' => $orders->total(),
+
+            'has_more' => $orders->hasMorePages(),
         ]);
     }
 }
