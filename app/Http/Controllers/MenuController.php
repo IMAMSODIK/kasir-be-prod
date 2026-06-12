@@ -185,14 +185,6 @@ class MenuController extends Controller
         }
     }
 
-    use App\Models\Menu;
-    use App\Models\FotoMenu;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\DB;
-    use Illuminate\Support\Facades\Storage;
-    use Illuminate\Support\Facades\Validator;
-    use Intervention\Image\Laravel\Facades\Image; // Pastikan Facade ini sudah aman
-
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
