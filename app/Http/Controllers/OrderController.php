@@ -78,12 +78,12 @@ class OrderController extends Controller
                     'note' => $item['note'] ?? null
                 ]);
 
-                // 🔹 untuk midtrans
+                // 🔹 PERBAIKAN 1: Tipe data ID harus String dan Nama dibatasi max 50 karakter (Aturan Ketat Midtrans API)
                 $itemDetails[] = [
-                    'id' => $menu->id,
+                    'id' => (string) $menu->id,
                     'price' => $price,
                     'quantity' => $qty,
-                    'name' => $menu->nama_menu
+                    'name' => substr($menu->nama_menu, 0, 50)
                 ];
             }
 
@@ -101,9 +101,15 @@ class OrderController extends Controller
                 'customer_details' => [
                     'first_name' => 'Customer',
                 ],
-                'expiry' => config('midtrans.expiry'),
-                'enabled_payments' => config('midtrans.enabled_payments'),
+                // 🔹 PERBAIKAN 2: Gunakan penanganan fallback (?? null) jika config bernilai kosong
+                'expiry' => config('midtrans.expiry') ?? [
+                    'unit' => 'minutes',
+                    'duration' => 60
+                ],
+                // 'enabled_payments' sengaja di-comment agar Midtrans memunculkan SEMUA channel aktif di production Anda
+                // 'enabled_payments' => config('midtrans.enabled_payments'),
             ];
+
             $snapToken = Snap::getSnapToken($params);
 
             DB::commit();
