@@ -164,6 +164,25 @@ class UserController extends Controller
         }
     }
 
+    public function reset($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->password = bcrypt('12345');
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Password berhasil direset'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mereset password'
+            ], 500);
+        }
+    }
+
     public function restore($id)
     {
         try {

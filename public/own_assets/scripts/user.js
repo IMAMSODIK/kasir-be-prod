@@ -68,6 +68,7 @@ let table = $('#dataTable').DataTable({
             return `
                             <button class="btn btn-sm btn-primary edit-btn" data-id="${data}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             <button class="btn btn-sm btn-danger delete-btn" data-id="${data}"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            <button class="btn btn-sm btn-danger reset-btn" data-id="${data}">Reset Password</button>
                         `;
         }
     }
@@ -287,6 +288,42 @@ $(document).on('click', '.delete-btn', function () {
                         alertResult('success', 'Berhasil', res.message);
                     } else {
                         alertResult('warning', 'Hapus Data Gagal', 'Gagal menghapus data');
+                    }
+                },
+                error: function () {
+                    alertResult('error', 'Error', 'Terjadi kesalahan server');
+                }
+            });
+
+        }
+    });
+});
+
+$(document).on('click', '.reset-btn', function () {
+    let id = $(this).data('id');
+
+    Swal.fire({
+        title: 'Yakin?',
+        text: "Apakah anda yakin ingin reset password user ini?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, reset!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: '/users/reset/' + id,
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (res) {
+                    if (res.success) {
+                        table.ajax.reload(null, false);
+                        alertResult('success', 'Berhasil', res.message);
+                    } else {
+                        alertResult('warning', 'Reset Data Gagal', 'Gagal mereset password');
                     }
                 },
                 error: function () {

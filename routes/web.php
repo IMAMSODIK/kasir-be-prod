@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/users/store', [UserController::class, 'store']);
     Route::post('/users/update/{id}', [UserController::class, 'update']);
     Route::post('/users/delete/{id}', [UserController::class, 'deactivate']);
+    Route::post('/users/reset/{id}', [UserController::class, 'reset']);
     Route::post('/users/restore/{id}', [UserController::class, 'restore']);
     Route::delete('/users/destroy/{id}', [UserController::class, 'destroy']);
 
