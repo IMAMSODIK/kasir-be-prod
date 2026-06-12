@@ -91,7 +91,6 @@ class OrderController extends Controller
                 'total_amount' => $grossAmount
             ]);
 
-            // 🔹 PARAM MIDTRANS
             $params = [
                 'transaction_details' => [
                     'order_id' => $orderId,
@@ -104,6 +103,7 @@ class OrderController extends Controller
                 'expiry' => config('midtrans.expiry'),
                 'enabled_payments' => config('midtrans.enabled_payments'),
             ];
+            dd($params);
 
             $snapToken = Snap::getSnapToken($params);
 
