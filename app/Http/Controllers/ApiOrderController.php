@@ -169,6 +169,14 @@ class ApiOrderController extends Controller
 
             $order = Order::where('order_id', $orderId)->first();
 
+            $status = \Midtrans\Transaction::status('TRX-120626-005');
+            dd([
+        'order_id' => $orderId,
+        'server_key' => substr(Config::$serverKey, 0, 25),
+        'is_production' => Config::$isProduction,
+        'status' => $status
+    ]);
+
             if (!$order) {
                 return response()->json([
                     'success' => false,
