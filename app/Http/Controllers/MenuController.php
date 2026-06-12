@@ -185,17 +185,37 @@ class MenuController extends Controller
         }
     }
 
+    use App\Models\Menu;
+    use App\Models\FotoMenu;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Facades\Storage;
+    use Illuminate\Support\Facades\Validator;
+    use Intervention\Image\Laravel\Facades\Image; // Pastikan Facade ini sudah aman
+
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'edit_nama_menu' => 'required',
-            'edit_kategori_menu_id' => 'required',
+            'id' => 'required|exists:menus,id',
+            'edit_nama_menu' => 'required|unique:menus,nama_menu,' . $request->id,
+            'edit_kategori_menu_id' => 'required|exists:kategori_menus,id',
             'edit_harga' => 'required|numeric',
-            'edit_foto_menu.*' => 'image|mimes:jpg,jpeg,png|max:2048',
+            'edit_foto_menu' => 'nullable|array',
+            'edit_foto_menu.*' => 'image|mimes:jpg,jpeg,png,webp|max:20480',
+        ], [
+            'edit_nama_menu.required' => 'Nama menu wajib diisi',
+            'edit_nama_menu.unique' => 'Nama menu sudah digunakan oleh menu lain',
+            'edit_kategori_menu_id.required' => 'Kategori wajib dipilih',
+            'edit_kategori_menu_id.exists' => 'Kategori tidak valid',
+            'edit_harga.required' => 'Harga wajib diisi',
+            'edit_harga.numeric' => 'Harga harus berupa angka',
+            'edit_foto_menu.*.image' => 'File harus berupa gambar',
+            'edit_foto_menu.*.mimes' => 'Format gambar harus jpg, jpeg, png, atau webp',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
+                'success' => false,
                 'errors' => $validator->errors()
             ], 422);
         }
@@ -213,25 +233,25 @@ class MenuController extends Controller
             ]);
 
             if ($request->hasFile('edit_foto_menu')) {
-
                 foreach ($menu->fotoMenus as $foto) {
                     Storage::disk('public')->delete($foto->foto_path);
                 }
 
                 $menu->fotoMenus()->delete();
-
                 foreach ($request->file('edit_foto_menu') as $file) {
-                    $path = $file->store('foto_menu', 'public');
-
+                    $compressedImage = Image::read($file)
+                        ->scale(width: 800)
+                        ->toWebp(75);
+                    $filename = 'foto_menu/' . time() . '_' . uniqid() . '.webp';
+                    Storage::disk('public')->put($filename, (string) $compressedImage);
                     FotoMenu::create([
                         'menu_id' => $menu->id,
-                        'foto_path' => $path
+                        'foto_path' => $filename
                     ]);
                 }
             }
 
             DB::commit();
-
             $menu->load(['fotoMenus', 'kategoriMenu']);
 
             return response()->json([
@@ -243,7 +263,8 @@ class MenuController extends Controller
             DB::rollBack();
 
             return response()->json([
-                'message' => 'Gagal update' . $e->getMessage()
+                'success' => false,
+                'message' => 'Gagal update data: ' . $e->getMessage()
             ], 500);
         }
     }
