@@ -119,7 +119,8 @@ class OrderController extends Controller
 
             return response()->json([
                 'message' => 'Checkout gagal',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ], 500);
         }
     }
