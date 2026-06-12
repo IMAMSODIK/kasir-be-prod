@@ -7,10 +7,10 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Midtrans\Snap;
 use Illuminate\Support\Facades\DB;
 
 use Midtrans\Config;
-use Midtrans\CoreApi;
 use Midtrans\Transaction;
 
 class ApiOrderController extends Controller
@@ -58,10 +58,6 @@ class ApiOrderController extends Controller
 
             $orderId = 'TRX-' . $today . '-' . $newNumber;
 
-            // =========================
-            // CREATE ORDER
-            // =========================
-
             $order = Order::create([
                 'order_id' => $orderId,
                 'total_amount' => 0,
@@ -96,7 +92,7 @@ class ApiOrderController extends Controller
                     'id' => (string) $menu->id,
                     'price' => $price,
                     'quantity' => $qty,
-                    'name' => $menu->nama_menu,
+                    'name' => substr($menu->nama_menu, 0, 50),
                 ];
             }
 
@@ -105,7 +101,7 @@ class ApiOrderController extends Controller
             ]);
 
             // =========================
-            // CASH FLOW
+            // CASH
             // =========================
 
             if ($paymentType === 'tunai') {
@@ -122,12 +118,10 @@ class ApiOrderController extends Controller
             }
 
             // =========================
-            // DIRECT QRIS FLOW
+            // SNAP MIDTRANS
             // =========================
 
             $params = [
-                'payment_type' => 'gopay',
-
                 'transaction_details' => [
                     'order_id' => $orderId,
                     'gross_amount' => $grossAmount,
@@ -140,59 +134,31 @@ class ApiOrderController extends Controller
                     'email' => $request->user()?->email ?? 'customer@example.com',
                 ],
 
-                'custom_expiry' => [
-                    'expiry_duration' => 60,
-                    'unit' => 'minute',
+                'expiry' => [
+                    'unit' => 'minutes',
+                    'duration' => 60,
                 ],
             ];
 
-            $charge = CoreApi::charge($params);
-
-            $qrisUrl = null;
-
-            if (isset($charge->actions)) {
-
-                foreach ($charge->actions as $action) {
-
-                    if ($action->name === 'generate-qr-code') {
-                        $qrisUrl = $action->url;
-                    }
-                }
-            }
+            $snapToken = Snap::getSnapToken($params);
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'QRIS berhasil dibuat',
-
                 'payment_type' => 'qris',
-
                 'order_id' => $orderId,
-
-                'transaction_status' => $charge->transaction_status ?? 'pending',
-
-                'qris_url' => $qrisUrl,
-
-                'qr_string' => $charge->qr_string ?? null,
-
-                'expiry_time' => $charge->expiry_time ?? null,
-
+                'snap_token' => $snapToken,
                 'gross_amount' => $grossAmount,
             ]);
         } catch (\Exception $e) {
 
             DB::rollBack();
 
-            dd(
-                config('midtrans.is_production'),
-                substr(config('midtrans.server_key'), 0, 25),
-                $e->getMessage()
-            );
-
             return response()->json([
                 'success' => false,
-                'message' => 'Checkout gagal: ' . $e->getMessage(),
+                'message' => 'Checkout gagal',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
