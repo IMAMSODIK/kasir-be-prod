@@ -177,41 +177,50 @@ class ApiOrderController extends Controller
                 ], 404);
             }
 
-            // =========================
-            // CHECK MIDTRANS STATUS
-            // =========================
-
             if ($order->payment_type === 'qris') {
 
                 $status = Transaction::status($orderId);
 
-                $transactionStatus = $status->transaction_status ?? 'pending';
+                $transactionStatus =
+                    $status->transaction_status ?? 'pending';
 
-                // settlement = paid
-                if (
-                    $transactionStatus === 'settlement' ||
-                    $transactionStatus === 'capture'
-                ) {
+                switch ($transactionStatus) {
 
-                    $order->update([
-                        'status' => 'paid'
-                    ]);
-                }
+                    case 'capture':
+                    case 'settlement':
 
-                // expired
-                if ($transactionStatus === 'expire') {
+                        $order->update([
+                            'status' => 'paid'
+                        ]);
+                        break;
 
-                    $order->update([
-                        'status' => 'expired'
-                    ]);
-                }
+                    case 'pending':
 
-                // cancel
-                if ($transactionStatus === 'cancel') {
+                        $order->update([
+                            'status' => 'pending'
+                        ]);
+                        break;
 
-                    $order->update([
-                        'status' => 'cancelled'
-                    ]);
+                    case 'expire':
+
+                        $order->update([
+                            'status' => 'expired'
+                        ]);
+                        break;
+
+                    case 'cancel':
+
+                        $order->update([
+                            'status' => 'cancelled'
+                        ]);
+                        break;
+
+                    case 'deny':
+
+                        $order->update([
+                            'status' => 'failed'
+                        ]);
+                        break;
                 }
 
                 $order->refresh();
