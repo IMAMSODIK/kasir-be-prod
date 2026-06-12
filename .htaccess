@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Jika permintaan bukan ke folder public
+RewriteCond %{REQUEST_URI} !^/public
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite ke public tanpa mengubah method
+RewriteRule ^(.*)$ public/$1 [L]
