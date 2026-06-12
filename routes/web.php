@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     try {
         $data = [
-            'kategori' => \App\Models\KategoriMenu::with('menus')->get(),
+            'kategori' => \App\Models\KategoriMenu::with('menus.fotoMenus')->get(),
         ];
         return view('welcome', $data);
     } catch (\Exception $e) {
