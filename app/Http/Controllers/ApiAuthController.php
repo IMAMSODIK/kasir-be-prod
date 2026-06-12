@@ -16,9 +16,6 @@ class ApiAuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        return response()->json([
-            'user' => $user
-        ], 401);
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
