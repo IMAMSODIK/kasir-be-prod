@@ -57,13 +57,6 @@ return [
     | Kosongkan [] untuk semua metode
     */
     'enabled_payments' => [
-        'credit_card',
-        'bca_va',
-        'bni_va',
-        'bri_va',
-        'gopay',
-        'shopeepay',
-        'qris',
     ],
 
     /*
