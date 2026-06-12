@@ -180,10 +180,15 @@ class ApiOrderController extends Controller
 
                 'gross_amount' => $grossAmount,
             ]);
-
         } catch (\Exception $e) {
 
             DB::rollBack();
+
+            dd(
+                config('midtrans.is_production'),
+                substr(config('midtrans.server_key'), 0, 25),
+                $e->getMessage()
+            );
 
             return response()->json([
                 'success' => false,
@@ -253,7 +258,6 @@ class ApiOrderController extends Controller
                 'payment_type' => $order->payment_type,
                 'total_amount' => $order->total_amount,
             ]);
-
         } catch (\Exception $e) {
 
             return response()->json([

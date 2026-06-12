@@ -26,7 +26,6 @@ class OrderController extends Controller
 
     public function checkout(Request $request)
     {
-        dd('MASUK CHECKOUT');
         $request->validate([
             'items' => 'required|array|min:1',
             'items.*.id' => 'required',
@@ -105,8 +104,6 @@ class OrderController extends Controller
                 'expiry' => config('midtrans.expiry'),
                 'enabled_payments' => config('midtrans.enabled_payments'),
             ];
-
-            Log::info('MIDTRANS PARAMS', $params);
             $snapToken = Snap::getSnapToken($params);
 
             DB::commit();
