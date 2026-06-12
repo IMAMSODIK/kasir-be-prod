@@ -379,7 +379,7 @@ class OrderController extends Controller
 
         $perPage = $request->get(
             'per_page',
-            20
+            10
         );
 
         $orders = $query->paginate($perPage);
