@@ -10,6 +10,7 @@ use Midtrans\Snap;
 use App\Models\Menu;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
 
 class OrderController extends Controller
@@ -103,8 +104,8 @@ class OrderController extends Controller
                 'expiry' => config('midtrans.expiry'),
                 'enabled_payments' => config('midtrans.enabled_payments'),
             ];
-            dd($params);
 
+            Log::info('MIDTRANS PARAMS', $params);
             $snapToken = Snap::getSnapToken($params);
 
             DB::commit();
