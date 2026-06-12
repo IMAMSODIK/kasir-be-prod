@@ -165,15 +165,7 @@ class ApiOrderController extends Controller
 
     public function checkStatus($orderId)
     {
-        $status = \Midtrans\Transaction::status('TRX-120626-005');
-            dd([
-                'order_id' => $orderId,
-                'server_key' => substr(Config::$serverKey, 0, 25),
-                'is_production' => Config::$isProduction,
-                'status' => $status
-            ]);
         try {
-
             $order = Order::where('order_id', $orderId)->first();
 
             if (!$order) {
@@ -184,50 +176,51 @@ class ApiOrderController extends Controller
                 ], 404);
             }
 
+            // Jika order tunai, langsung return paid
+            if ($order->payment_type === 'tunai') {
+                return response()->json([
+                    'success' => true,
+                    'status' => 'paid',
+                    'order_id' => $order->order_id,
+                    'payment_type' => $order->payment_type,
+                    'total_amount' => $order->total_amount,
+                ]);
+            }
+
             if ($order->payment_type === 'qris') {
+                try {
+                    // Ambil status dari Midtrans
+                    $status = Transaction::status($orderId);
+                    $transactionStatus = $status->transaction_status ?? 'pending';
 
-                $status = Transaction::status($orderId);
-
-                $transactionStatus =
-                    $status->transaction_status ?? 'pending';
-
-                switch ($transactionStatus) {
-
-                    case 'capture':
-                    case 'settlement':
-
-                        $order->update([
-                            'status' => 'paid'
-                        ]);
-                        break;
-
-                    case 'pending':
-
-                        $order->update([
-                            'status' => 'pending'
-                        ]);
-                        break;
-
-                    case 'expire':
-
-                        $order->update([
-                            'status' => 'expired'
-                        ]);
-                        break;
-
-                    case 'cancel':
-
-                        $order->update([
-                            'status' => 'cancelled'
-                        ]);
-                        break;
-
-                    case 'deny':
-
-                        $order->update([
-                            'status' => 'failed'
-                        ]);
-                        break;
+                    switch ($transactionStatus) {
+                        case 'capture':
+                        case 'settlement':
+                            $order->update(['status' => 'paid']);
+                            break;
+                        case 'pending':
+                            $order->update(['status' => 'pending']);
+                            break;
+                        case 'expire':
+                            $order->update(['status' => 'expired']);
+                            break;
+                        case 'cancel':
+                            $order->update(['status' => 'cancelled']);
+                            break;
+                        case 'deny':
+                            $order->update(['status' => 'failed']);
+                            break;
+                    }
+                } catch (\Exception $midtransError) {
+                    // JIKA MIDTRANS RETURN 404 (Transaction doesn't exist)
+                    // Berarti user baru buka Snap dan belum memilih metode pembayaran di dalam webview.
+                    // Jangan lempar error 500, biarkan status tetap 'pending' di mata aplikasi mobile.
+                    if (str_contains($midtransError->getMessage(), "404") || str_contains($midtransError->getMessage(), "doesn't exist")) {
+                        $transactionStatus = 'pending';
+                    } else {
+                        // Jika error database/jaringan lain, barulah lempar throw
+                        throw $midtransError;
+                    }
                 }
 
                 $order->refresh();
@@ -235,13 +228,12 @@ class ApiOrderController extends Controller
 
             return response()->json([
                 'success' => true,
-                'status' => $order->status,
+                'status' => $order->status, // akan mengembalikan 'pending' jika Midtrans me-return 404
                 'order_id' => $order->order_id,
                 'payment_type' => $order->payment_type,
                 'total_amount' => $order->total_amount,
             ]);
         } catch (\Exception $e) {
-
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal mengecek status: ' . $e->getMessage(),
