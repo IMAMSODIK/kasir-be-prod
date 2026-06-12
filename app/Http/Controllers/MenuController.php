@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use App\Http\Requests\StoreMenuRequest;
-use App\Http\Requests\UpdateMenuRequest;
 use App\Models\FotoMenu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 
 class MenuController extends Controller
 {
@@ -109,13 +108,15 @@ class MenuController extends Controller
             'nama_menu' => 'required|unique:menus,nama_menu',
             'kategori_menu_id' => 'required|exists:kategori_menus,id',
             'harga' => 'required|numeric',
-            'foto_menu' => 'required',
-            'foto_menu.*' => 'image|mimes:jpg,jpeg,png|max:20480',
+            'foto_menu' => 'required|array|min:1',
+            'foto_menu.*' => 'image|mimes:jpg,jpeg,png,webp|max:20480',
         ], [
             'nama_menu.required' => 'Nama menu wajib diisi',
             'nama_menu.unique' => 'Nama menu sudah ada',
             'kategori_menu_id.required' => 'Kategori wajib dipilih',
+            'kategori_menu_id.exists' => 'Kategori tidak valid',
             'harga.required' => 'Harga wajib diisi',
+            'harga.numeric' => 'Harga harus berupa angka',
             'foto_menu.required' => 'Minimal 1 foto wajib diupload',
         ]);
 
@@ -129,8 +130,8 @@ class MenuController extends Controller
         DB::beginTransaction();
 
         try {
-            $menu = Menu::with(['kategoriMenu', 'fotoMenus'])->create([
-                'id' => Str::uuid(),
+            $menu = Menu::create([
+                'id' => (string) Str::uuid(),
                 'nama_menu' => $request->nama_menu,
                 'kategori_menu_id' => $request->kategori_menu_id,
                 'harga' => $request->harga,
@@ -141,30 +142,32 @@ class MenuController extends Controller
 
             if ($request->hasFile('foto_menu')) {
                 foreach ($request->file('foto_menu') as $file) {
-                    $path = $file->store('foto_menu', 'public');
-
+                    $compressedImage = Image::read($file)
+                        ->scale(width: 800)
+                        ->toWebp(75);
+                    $filename = 'foto_menu/' . time() . '_' . uniqid() . '.webp';
+                    Storage::disk('public')->put($filename, (string) $compressedImage);
                     FotoMenu::create([
                         'menu_id' => $menu->id,
-                        'foto_path' => $path
+                        'foto_path' => $filename
                     ]);
                 }
             }
 
             DB::commit();
-
             $menu->load(['kategoriMenu', 'fotoMenus']);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Menu berhasil ditambahkan',
                 'data' => $menu
             ]);
         } catch (\Exception $e) {
-
             DB::rollBack();
 
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat menyimpan data' . $e->getMessage()
+                'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()
             ], 500);
         }
     }
