@@ -26,6 +26,7 @@ class OrderController extends Controller
 
     public function checkout(Request $request)
     {
+        dd('MASUK CHECKOUT');
         $request->validate([
             'items' => 'required|array|min:1',
             'items.*.id' => 'required',
